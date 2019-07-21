@@ -80,6 +80,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="态度决定高度,细节决定成败" type="application/atom+xml">
 
@@ -88,20 +90,20 @@
 
 
 
-<meta name="description" content="如何动态设置Solr Payload 问题背景Solr 在6.x 提供了index payload的功能，（payload是指可以指定为分词之后的每个term指定一个二进制的信息，用于针对每个term作出一定的行为，例如可以用来存储指定的score用于排序，也可以用来存储指定的数据，用于检查term的一定的检查），简单的查阅官方文档之后（这里使用solr7.7.2作为样例）,得知我们可以动态的设定">
+<meta name="description" content="如何动态设置Solr Payload 问题背景Solr 从6.x开始提供了index payload的功能，（payload是指可以指定为分词之后的每个term指定一个二进制的信息，用于针对每个term作出一定的行为，例如可以用来存储指定的score用于排序，也可以用来存储指定的数据，用于检查term的一定的检查），简单的查阅官方文档之后（这里使用solr7.7.2作为样例）,得知我们可以动态的设">
 <meta name="keywords" content="Solr,Payload,动态设置">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何动态设置Solr Payload">
 <meta property="og:url" content="http://fengqingleiyue.github.io/2019/07/10/SolrPayLoads/index.html">
 <meta property="og:site_name" content="态度决定高度,细节决定成败">
-<meta property="og:description" content="如何动态设置Solr Payload 问题背景Solr 在6.x 提供了index payload的功能，（payload是指可以指定为分词之后的每个term指定一个二进制的信息，用于针对每个term作出一定的行为，例如可以用来存储指定的score用于排序，也可以用来存储指定的数据，用于检查term的一定的检查），简单的查阅官方文档之后（这里使用solr7.7.2作为样例）,得知我们可以动态的设定">
+<meta property="og:description" content="如何动态设置Solr Payload 问题背景Solr 从6.x开始提供了index payload的功能，（payload是指可以指定为分词之后的每个term指定一个二进制的信息，用于针对每个term作出一定的行为，例如可以用来存储指定的score用于排序，也可以用来存储指定的数据，用于检查term的一定的检查），简单的查阅官方文档之后（这里使用solr7.7.2作为样例）,得知我们可以动态的设">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://s2.ax1x.com/2019/07/21/epDlO1.png">
 <meta property="og:image" content="https://s2.ax1x.com/2019/07/21/epDVoT.png">
-<meta property="og:updated_time" content="2019-07-21T06:23:22.000Z">
+<meta property="og:updated_time" content="2019-07-21T06:30:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何动态设置Solr Payload">
-<meta name="twitter:description" content="如何动态设置Solr Payload 问题背景Solr 在6.x 提供了index payload的功能，（payload是指可以指定为分词之后的每个term指定一个二进制的信息，用于针对每个term作出一定的行为，例如可以用来存储指定的score用于排序，也可以用来存储指定的数据，用于检查term的一定的检查），简单的查阅官方文档之后（这里使用solr7.7.2作为样例）,得知我们可以动态的设定">
+<meta name="twitter:description" content="如何动态设置Solr Payload 问题背景Solr 从6.x开始提供了index payload的功能，（payload是指可以指定为分词之后的每个term指定一个二进制的信息，用于针对每个term作出一定的行为，例如可以用来存储指定的score用于排序，也可以用来存储指定的数据，用于检查term的一定的检查），简单的查阅官方文档之后（这里使用solr7.7.2作为样例）,得知我们可以动态的设">
 <meta name="twitter:image" content="https://s2.ax1x.com/2019/07/21/epDlO1.png">
 
 
@@ -312,7 +314,7 @@
       
 
       
-        <h1 id="如何动态设置Solr-Payload"><a href="#如何动态设置Solr-Payload" class="headerlink" title="如何动态设置Solr Payload "></a><font color="#0077bb">如何动态设置Solr Payload </font></h1><h2 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a><font color="#2C3E50">问题背景</font></h2><p>Solr 在6.x 提供了index payload的功能，（payload是指可以指定为分词之后的每个term指定一个二进制的信息，用于针对每个term作出一定的行为，例如可以用来存储指定的score用于排序，也可以用来存储指定的数据，用于检查term的一定的检查），简单的查阅官方文档之后（这里使用solr7.7.2作为样例）,得知我们可以动态的设定每个term的payload（参考<a href="https://lucidworks.com/post/end-to-end-payload-example-in-solr/" target="_blank" rel="noopener">SolrPayload</a>），也可以根据指定的token type设置payload数值(参考<a href="https://lucene.apache.org/solr/guide/7_4/filter-descriptions.html#numeric-payload-token-filter" target="_blank" rel="noopener">Numeric Payload Token Filter</a>)，但是上述两种方式都无法根据输入的变化而动态的改变payload的值。</p>
+        <h1 id="如何动态设置Solr-Payload"><a href="#如何动态设置Solr-Payload" class="headerlink" title="如何动态设置Solr Payload "></a><font color="#0077bb">如何动态设置Solr Payload </font></h1><h2 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a><font color="#2C3E50">问题背景</font></h2><p>Solr 从6.x开始提供了index payload的功能，（payload是指可以指定为分词之后的每个term指定一个二进制的信息，用于针对每个term作出一定的行为，例如可以用来存储指定的score用于排序，也可以用来存储指定的数据，用于检查term的一定的检查），简单的查阅官方文档之后（这里使用solr7.7.2作为样例）,得知我们可以动态的设定每个term的payload（参考<a href="https://lucidworks.com/post/end-to-end-payload-example-in-solr/" target="_blank" rel="noopener">SolrPayload</a>），也可以根据指定的token type设置payload数值(参考<a href="https://lucene.apache.org/solr/guide/7_4/filter-descriptions.html#numeric-payload-token-filter" target="_blank" rel="noopener">Numeric Payload Token Filter</a>)，但是上述两种方式都无法根据输入的变化而动态的改变payload的值。</p>
 <h3 id="具体需求"><a href="#具体需求" class="headerlink" title="具体需求"></a><font color="#2C3E50">具体需求</font></h3><p>由于和具体的的业务有关，我这里将需求简单化。</p>
 <blockquote>
 <ul>
@@ -425,22 +427,6 @@
       
 
       
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/07/10/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
-      
 
       
       
@@ -513,7 +499,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
