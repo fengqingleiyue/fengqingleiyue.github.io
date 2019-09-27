@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -78,7 +78,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="疯狂码农, 编程狂魔">
 
 
 
@@ -91,13 +91,17 @@
 
 
 
+<meta name="description" content="一个专注为什么的博客">
+<meta name="keywords" content="Lucene,Solr,ElasticSearch,NLP,Machine Learn,编程">
 <meta property="og:type" content="website">
 <meta property="og:title" content="态度决定高度,细节决定成败">
 <meta property="og:url" content="http://fengqingleiyue.github.io/index.html">
 <meta property="og:site_name" content="态度决定高度,细节决定成败">
+<meta property="og:description" content="一个专注为什么的博客">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="态度决定高度,细节决定成败">
+<meta name="twitter:description" content="一个专注为什么的博客">
 
 
 
@@ -105,7 +109,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -169,7 +173,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">疯狂的码农</p>
       
   </div>
 
@@ -266,7 +270,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="FQL">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -331,72 +335,18 @@
 
       
         
-          
-            <h1 id="IBM-ICU-简繁转换工具的性能坑"><a href="#IBM-ICU-简繁转换工具的性能坑" class="headerlink" title="IBM ICU 简繁转换工具的性能坑"></a><font color="#0077bb">IBM ICU 简繁转换工具的性能坑</font></h1><h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a><font color="#2C3E50">背景介绍</font></h2><p>由于工作内容的需要，我们处理的文本数据中会有繁体中文，但是我们的产品的使用客户都是习惯使用简体中文（台湾是中国不可割舍的一部分），所以为了方便用户使用简体中文检索到繁体中文，我们需要在建立索引的时候（这里以solr为例子）进行简繁转换。简单的查看了Solr的文档，以及简单的百度或者Google, 我们可以在Solr(7.7.2)中添加以下的字段类型来进行中文分词和简繁转换。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">"test"</span>  <span class="attr">class</span>=<span class="string">"solr.TextField"</span> &gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">analyzer</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">charFilter</span> <span class="attr">class</span>=<span class="string">"solr.HTMLStripCharFilterFactory"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">charFilter</span> <span class="attr">class</span>=<span class="string">"solr.MappingCharFilterFactory"</span> <span class="attr">mapping</span>=<span class="string">"mapping-ISOLatin1Accent.txt"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">"solr.StandardTokenizerFactory"</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.CJKWidthFilterFactory"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.ICUTransformFilterFactory"</span> <span class="attr">id</span>=<span class="string">"Traditional-Simplified"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.LowerCaseFilterFactory"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.CJKBigramFilterFactory"</span> <span class="attr">han</span>=<span class="string">"true"</span> <span class="attr">outputUnigrams</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>可以看到这是最简单的中文分词器-&gt; 二元分词，并且在二元的基础上输出了一元的结果，这里可以简单看下分词结果<br><img src="https://s2.ax1x.com/2019/07/21/eCmvwt.png" alt="二元+一元分词效果"></p>
-<h2 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a><font color="#2C3E50">发现问题</font></h2><p>因为是需要上线的服务，所以习惯性的需要在本地进行一些索引和查询的性能测试，为了测试索引的性能，我准备了2700万的文档数据（包含简体中文和繁体中文），进行压缩之后这些文档大小在135GB左右，基本上可以做一个长时间的性能摸底测试了。<br>我们简单的看下用户测试的机器配置</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">机器类型</th>
-<th style="text-align:center">CPU 配置</th>
-<th style="text-align:center">内存配置</th>
-<th style="text-align:center">磁盘配置</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Solr服务机器</td>
-<td style="text-align:center">12 Core Intel(R) Xeon(R) CPU E5-2420 v2 @ 2.20GHz</td>
-<td style="text-align:center">30GB</td>
-<td style="text-align:center">7TB LVM</td>
-</tr>
-<tr>
-<td style="text-align:center">索引机器</td>
-<td style="text-align:center">4 Core Intel(R) Core(TM) i5-4590 CPU @ 3.30GHz</td>
-<td style="text-align:center">16GB</td>
-<td style="text-align:center">1TB HDD</td>
-</tr>
-</tbody>
-</table>
-<p>并且<strong>索引机器</strong> 和 <strong>Solr 服务机器</strong> 之前的网络为千兆带宽，所以网络上不会成为瓶颈。<br>并且Solr 的一些重要配置为</p>
-<blockquote>
-<ul>
-<li>内存配置为SOLR_JAVA_MEM=”-Xms6144m -Xmx6144m”</li>
-<li>ramBufferSizeMB配置为<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ramBufferSizeMB</span>&gt;</span>100<span class="tag">&lt;/<span class="name">ramBufferSizeMB</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</blockquote>
-<blockquote>
-<ul>
-<li>mergePolicyFactory 为<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mergePolicyFactory</span> <span class="attr">class</span>=<span class="string">"org.apache.solr.index.TieredMergePolicyFactory"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">int</span> <span class="attr">name</span>=<span class="string">"maxMergeAtOnce"</span>&gt;</span>30<span class="tag">&lt;/<span class="name">int</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">int</span> <span class="attr">name</span>=<span class="string">"segmentsPerTier"</span>&gt;</span>40<span class="tag">&lt;/<span class="name">int</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">double</span> <span class="attr">name</span>=<span class="string">"noCFSRatio"</span>&gt;</span>0<span class="tag">&lt;/<span class="name">double</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">int</span> <span class="attr">name</span>=<span class="string">"maxMergedSegmentMB"</span>&gt;</span>1024<span class="tag">&lt;/<span class="name">int</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mergePolicyFactory</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</blockquote>
-<blockquote>
-<ul>
-<li>mergeScheduler 为<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mergeScheduler</span> <span class="attr">class</span>=<span class="string">"org.apache.lucene.index.ConcurrentMergeScheduler"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">int</span> <span class="attr">name</span>=<span class="string">"maxMergeCount"</span>&gt;</span>12<span class="tag">&lt;/<span class="name">int</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">int</span> <span class="attr">name</span>=<span class="string">"maxThreadCount"</span>&gt;</span>6<span class="tag">&lt;/<span class="name">int</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mergeScheduler</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</blockquote>
-<blockquote>
-<ul>
-<li>autoCommit 的配置为 (防止频繁的autocommit生成太多的小段导致Solr一直在合并段)<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">autoCommit</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">maxTime</span>&gt;</span>$&#123;solr.autoCommit.maxTime:180000&#125;<span class="tag">&lt;/<span class="name">maxTime</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">openSearcher</span>&gt;</span>false<span class="tag">&lt;/<span class="name">openSearcher</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">autoCommit</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</blockquote>
-<p>为了仅可能的用尽服务端的CPU，我在客户端开了20个线程往服务端丢数据，理论上应该可以将服务端的cpu跑满。但是实际的服务端cpu使用情况为<img src="https://s2.ax1x.com/2019/07/21/eCCX59.png" alt="Solr Server CPU usage"><br>并且客户端的索引速度只有<strong>404 doc/s</strong> (因为和具体的文档的大小和内容有关系，速度的值并没有太多的参考意义，我们需要观察的更多的速度的变化率)<br>显然这个结果（cpu使用率）和预期的相差非常大？为啥还有那么多的cpu资源在idl ？？</p>
-<h2 id="定位问题"><a href="#定位问题" class="headerlink" title="定位问题"></a><font color="#2C3E50">定位问题</font></h2><p>为了搞清楚为啥会有这么多cpu在idl，最简单的办法就是使用一些jvm的profile工具，可以看到cpu把大量的资源消耗在什么地方，从而我们可以定位到发生问题的代码的类甚至某一行，这里我们使用的工具是<a href="https://visualvm.github.io/" target="_blank" rel="noopener">VisualVM</a>,当然为了能够让VisualVM能够访问服务端的jvm进程，我们需要对Solr进行一些配置，这个比较简单，主要是修改<strong>solr.in.sh</strong>文件的内容，直接上具体的配置点<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SOLR_OPTS=<span class="string">"<span class="variable">$SOLR_OPTS</span> -Dcom.sun.management.jmxremote"</span></span><br><span class="line">SOLR_OPTS=<span class="string">"<span class="variable">$SOLR_OPTS</span> -Dcom.sun.management.jmxremote.port=28983"</span></span><br><span class="line">SOLR_OPTS=<span class="string">"<span class="variable">$SOLR_OPTS</span> -Dcom.sun.management.jmxremote.ssl=false"</span></span><br><span class="line">SOLR_OPTS=<span class="string">"<span class="variable">$SOLR_OPTS</span> -Dcom.sun.management.jmxremote.authenticate=false"</span></span><br><span class="line">SOLR_OPTS=<span class="string">"<span class="variable">$SOLR_OPTS</span> -Djava.rmi.server.hostname=192.168.18.2"</span></span><br></pre></td></tr></table></figure></p>
-<p>重新开启服务端和客户端进行压力测试（之前的数据已经清理掉了），在程序运行了几分钟之后我们可以通过VisualVM的CPU profile功能发现，大量的cpu时间被消耗在了<strong>com.ibm.icu.text.RuleBasedTransliterator.handlerTransliterate()</strong> 方法上了,<br><img src="https://s2.ax1x.com/2019/07/21/eCeRVP.png" alt="VisualVM CPU Profile"><br>回想了下Solr的中的字段的定了中有个<strong>solr.ICUTransformFilterFactory</strong>filter，显然就是这个filter耗费了大量的cpu时间（看包名和类型就能联想到）,为了简单的验证是不是这个类导致的问题，我简单的做了下对比实验，我可以把这个filter注释掉看下服务端的cpu使用率和客户端的索引速度。直接修改schema中的field type定义<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">"test"</span>  <span class="attr">class</span>=<span class="string">"solr.TextField"</span> &gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">analyzer</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">charFilter</span> <span class="attr">class</span>=<span class="string">"solr.HTMLStripCharFilterFactory"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">charFilter</span> <span class="attr">class</span>=<span class="string">"solr.MappingCharFilterFactory"</span> <span class="attr">mapping</span>=<span class="string">"mapping-ISOLatin1Accent.txt"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">"solr.StandardTokenizerFactory"</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.CJKWidthFilterFactory"</span>/&gt;</span></span><br><span class="line">                <span class="comment">&lt;!-- &lt;filter class="solr.ICUTransformFilterFactory" id="Traditional-Simplified"/&gt; --&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.LowerCaseFilterFactory"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.CJKBigramFilterFactory"</span> <span class="attr">han</span>=<span class="string">"true"</span> <span class="attr">outputUnigrams</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>然后重新开启服务端和客户端进行压力测试（之前的数据已经清理掉了），直接上cpu使用率和索引速度信息<br><img src="https://s2.ax1x.com/2019/07/21/eCAuWj.png" alt="Solr Server CPU usage"><br>并且客户端的索引速度也飙到了<strong>900 doc/s</strong>，尼玛坑爹的<strong>ICUTransformFilterFactory</strong>,搞个简繁转换还能搞出个幺蛾子，再看下VisualVM  的cpu profile结果<br><img src="https://s2.ax1x.com/2019/07/21/eCenH0.png" alt="VisualVM CPU Profile"><br>症状100%消失,更加肯定就是<strong>ICUTransformFilterFactory</strong>搞出来的幺蛾子，怎么弄个简繁转换还能出这种问题，弱爆了。。。</p>
-<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a><font color="#2C3E50">源码分析</font></h2><p>为了100%确认真的是<strong>ICUTransformFilterFactory</strong>导致的问题，我下载了Solr-7.7.2的源代码，并且进行了源码的debug，<br>最终在<strong>com.ibm.icu.text.RuleBasedTransliterator.handlerTransliterate()</strong>中找到的真正的问题所在，废话不说上代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Deprecated</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">handleTransliterate</span><span class="params">(Replaceable text, Position index, <span class="keyword">boolean</span> incremental)</span> </span>&#123;</span><br><span class="line">        RuleBasedTransliterator.Data var4 = <span class="keyword">this</span>.data;</span><br><span class="line">        <span class="keyword">synchronized</span>(<span class="keyword">this</span>.data) &#123;</span><br><span class="line">            <span class="keyword">int</span> loopCount = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> loopLimit = index.limit - index.start &lt;&lt; <span class="number">4</span>;</span><br><span class="line">            <span class="keyword">if</span>(loopLimit &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                loopLimit = <span class="number">2147483647</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span>(index.start &lt; index.limit &amp;&amp; loopCount &lt;= loopLimit &amp;&amp; <span class="keyword">this</span>.data.ruleSet.transliterate(text, index, incremental)) &#123;</span><br><span class="line">                ++loopCount;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>可见看见大大的<strong>synchronized</strong>关键字，难怪嘛，Solr的索引是多线程的，并且在看了ICU的一些初始化过程之后，在简繁转换这个case上的RuleBasedTransliterator.Data只用初始化一次就好，（具体的过程比较复杂，简单的来说这中简繁转换的rule来自于配置文件，显然配置文件不可能加载多次），所以一旦上了多线程就各种卡，cpu全消耗在内斗上了，哎。。。。，不过好消息是这个<strong>RuleBasedTransliterator</strong>类已经被打上了<strong>Deprecated</strong>标签了，所以估计在高版本的icu api中这个问题会不复存在。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a><font color="#2C3E50">解决方案</font></h2><p>最简单的解决方案就是等–&gt; 等官方干掉这个类，这样期待在未来的版本中icu不再使用这个坑爹的<strong>synchronized</strong>关键字，当然这显然不是最好的版本，当然还有一种相对简单的方案就是直接干掉<strong>synchronized</strong>关键字，然后重新编译打包一下就好，如果只是为了写这篇博客确实可以这么干，因为后期的维护成本为0，但是在真是的企业开发中还是不太可取的，如果solr今后版本升级，我们也要下载对应的icu包然后去掉<strong>synchronized</strong>关键字，然后在重新编译打包等操作，虽然说是一次性工作，但是相当于我们间接的在维护icu的源码了。<br>还有一种最暴力的做法，但是却是我比较推荐的做法，我们可以自己造一个简繁转换的solrplugin，确实，只是简单的简体中文到繁体中文的转换，我们只需要找到简繁的对照表就可以做了。说干就干，我直接提取了icu包中的简体中文和繁体中文的对照表（当然获取途径有多种，甚至wiki上都有），这里是我提取的<a href="https://github.com/fengqingleiyue/apache-solr-plugins/blob/master/zh-converter/src/main/resources/hant_hans.properties" target="_blank" rel="noopener">简体繁体对照表</a>,有了简繁转换表，那么solrplugin也就相对简单了，不多说，直接上<a href="https://github.com/fengqingleiyue/apache-solr-plugins/tree/master/zh-converter" target="_blank" rel="noopener">代码</a>,为了验证问题是否解决，我简单做了下对比测试，索引速度直接从原来的<strong>401/s</strong>上升到了<strong>936/s</strong> ,服务端的cpu使用率也能够飙升至<strong>90%</strong>左右，直接上图<img src="https://s2.ax1x.com/2019/08/18/mlPsMT.png" alt="Solr Server CPU Usage">至此icu导致的性能问题，已经得到解决。</p>
-
-          
+          <h1 id="IBM-ICU-简繁转换工具的性能坑"><a href="#IBM-ICU-简繁转换工具的性能坑" class="headerlink" title="IBM ICU 简繁转换工具的性能坑"></a><font color="#0077bb">IBM ICU 简繁转换工具的性能坑</font></h1><h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a><font color="#2C3E50">背景介绍</font></h2><p>由于工作内容的需要，我们处理的文本数据中会有繁体中文，但是我们的产品的使用客户都是习惯使用简体中文（台湾是中国不可割舍的一部分），所以为了方便用户使用简体中文检索到繁体中文，我们需要在建立索引的时候（这里以solr为例子）进行简繁转换。简单的查看了Solr的文档，以及简单的百度或者Google, 我们可以在Solr(7.7.2)中添加以下的字段类型来进行中文分词和简繁转换。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">"test"</span>  <span class="attr">class</span>=<span class="string">"solr.TextField"</span> &gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">analyzer</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">charFilter</span> <span class="attr">class</span>=<span class="string">"solr.HTMLStripCharFilterFactory"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">charFilter</span> <span class="attr">class</span>=<span class="string">"solr.MappingCharFilterFactory"</span> <span class="attr">mapping</span>=<span class="string">"mapping-ISOLatin1Accent.txt"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">"solr.StandardTokenizerFactory"</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.CJKWidthFilterFactory"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.ICUTransformFilterFactory"</span> <span class="attr">id</span>=<span class="string">"Traditional-Simplified"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.LowerCaseFilterFactory"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"solr.CJKBigramFilterFactory"</span> <span class="attr">han</span>=<span class="string">"true"</span> <span class="attr">outputUnigrams</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到这是最简单的中文分词器-&gt; 二元分词，并且在二元的基础上输出了一元的结果，这里可以简单看下分词结果<br><img src="https://s2.ax1x.com/2019/07/21/eCmvwt.png" alt="二元+一元分词效果"><br>似乎配置+使用起来也就5s(666),但是实际情况是性能不够，射不高，跑不快。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/21/IBMICUSlowIssue/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
-    </div>
+    </p></div>
     
     
     
@@ -445,7 +395,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="FQL">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -510,94 +460,17 @@
 
       
         
-          
-            <h1 id="如何动态设置Solr-Payload"><a href="#如何动态设置Solr-Payload" class="headerlink" title="如何动态设置Solr Payload "></a><font color="#0077bb">如何动态设置Solr Payload </font></h1><h2 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a><font color="#2C3E50">问题背景</font></h2><p>Solr 从6.x开始提供了index payload的功能，（payload是指可以指定为分词之后的每个term指定一个二进制的信息，用于针对每个term作出一定的行为，例如可以用来存储指定的score用于排序，也可以用来存储指定的数据，用于检查term的一定的检查），简单的查阅官方文档之后（这里使用solr7.7.2作为样例）,得知我们可以动态的设定每个term的payload（参考<a href="https://lucidworks.com/post/end-to-end-payload-example-in-solr/" target="_blank" rel="noopener">SolrPayload</a>），也可以根据指定的token type设置payload数值(参考<a href="https://lucene.apache.org/solr/guide/7_4/filter-descriptions.html#numeric-payload-token-filter" target="_blank" rel="noopener">Numeric Payload Token Filter</a>)，但是上述两种方式都无法根据输入的变化而动态的改变payload的值。</p>
-<h3 id="具体需求"><a href="#具体需求" class="headerlink" title="具体需求"></a><font color="#2C3E50">具体需求</font></h3><p>由于和具体的的业务有关，我这里将需求简单化。</p>
-<blockquote>
-<ul>
-<li>业务中的字段类型为多值字段</li>
-<li>同一篇文档的多值字段中不同的数值需要设置不同的payload</li>
-<li>需要更具不同的参数设定不同的payload数值</li>
-</ul>
-</blockquote>
-<p>看到这里老司机肯定说这个需求太简单了，直接使用<strong>Numeric Payload Token Filter</strong> 就行了，可以将多值字段放到多个字段中，每个字段指定不同的payload的问题也可以解决啊 (只需要指定不同字段类型下面例子中的payload值就行了)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;analyzer&gt;</span><br><span class="line">  &lt;tokenizer class=&quot;solr.WhitespaceTokenizerFactory&quot;/&gt;</span><br><span class="line">  &lt;filter class=&quot;solr.NumericPayloadTokenFilterFactory&quot; payload=&quot;0.75&quot; typeMatch=&quot;word&quot;/&gt;</span><br><span class="line">&lt;/analyzer&gt;</span><br></pre></td></tr></table></figure></p>
-<p>确实，在多值字段的值的个数较少的时候我也推荐这种做法，因为相对比较简单，而且容易操作。但是如果我有多值字段有20个值，那么这样我的schema里面必须得有20个字段类型，20个字段来对应的多个payload ,那么管理这20个字段就变成了一件蛋疼的事情。<br>当然这里也有人会说为啥不用solr的<strong>DelimitedPayloadTokenFilter</strong>(<a href="https://lucidworks.com/post/solr-payloads/）" target="_blank" rel="noopener">用法可以参考</a>,我们可以手动指定每个term的payload，例如 (分隔符|后面的数字为payload)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">id,vals_dpf</span><br><span class="line">1,one|1.0 two|2.0 three|3.0</span><br><span class="line">2,weighted|50.0 weighted|100.0</span><br></pre></td></tr></table></figure></p>
-<p>是的，确实可以，但是前提是你的文档内容比较简单（内容简单的话推荐使用<strong>DelimitedPayloadTokenFilter</strong>,可以在index代码中根据业务动态控制），如果文档比较复杂，比如就是一段文本，那么相当于你得在index代码中将文本进行分词然后拼接成上述的例子，但是如果拼接的话solr的分词功能就形同摆设了，那么有没有办法既能保持index代码的简单性，也可以使用solr的分词功能来完成上述的需求呢？</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a><font color="#2C3E50">解决方案</font></h2><p>解决方案其实只有两步</p>
-<blockquote>
-<ul>
-<li>可以动态的设置某个字段的某个值的某个属性</li>
-<li>自定Tokenizer或者filter根据某个属性设定对用的payload</li>
-</ul>
-</blockquote>
-<p>(我去，这简直就是正确的废话)<br>那么既然我们的“解决方案”已经有了，我们该怎么一步步的实现这个“解决方案呢”，我们来一步步分析下，</p>
-<blockquote>
-<ul>
-<li>我们怎么动态的设置某个字段的某个值的某个属性？</li>
-</ul>
-</blockquote>
-<p>由于在index的代码中，Solr的给我们的API比较简单，直接就是 SolrInputDocument.set(fieldname,fieldvalue),我们能控制的要么就是fieldname，要么就是fieldvalue， 控制fieldname的方案我前面已经介绍过,可以使用<strong>Numeric Payload Token Filter</strong> 来解决我们的问题，这里我们可能设法在fieldname上做文章了，那么可以选择的方案只能是在fieldvalue上下功夫了，显然，我们只能在fieldvalue的头上加一些特殊的标记来解决问题，当然这些特殊的标记不能和你的字段值的某个或者某些特征发生冲突，例如我们可以在字段值的前段加上”[|xxx|]”,那么我们就可以在更具xxx的内容设定某个字段的某个属性就行了</p>
-<blockquote>
-<ul>
-<li>如何在solr端读取xxx的内容？</li>
-</ul>
-</blockquote>
-<p>solr的index功能是基于Lucene提供的，那么Lucene给我的api也比较简单<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Document doc = new Document();</span><br><span class="line">doc.add(new StringField(&quot;fieldName&quot;,&quot;document context&quot;, Field.Store.YES));</span><br></pre></td></tr></table></figure></p>
-<p>也就是所有的文档的字段到lucene这一层肯定都是转成一个document，然后向文档里面添加对应的字段，不同的字段使用不同的分词器来进行分词，对，我们可以自定义字段，在生成这个字段的时候解析<strong>xxx</strong>的内容，并且根据<strong>xxx</strong>的内容设定某个属性的值问题不就能解决了吗？<br>简单的翻看了Solr的某个字段类型的源码（这里以<strong>Solr.TextField</strong>为例子）<br><img src="https://s2.ax1x.com/2019/07/21/epDlO1.png" alt="Solr.TextField Method List"> ,都是一些get方法，貌似没啥用，看看父类<strong>org.apache.solr.schema.FieldType</strong><br><img src="https://s2.ax1x.com/2019/07/21/epDVoT.png" alt="FieldType Method List"><br>貌似<strong>createField</strong>就是我们要找的方法，我们可以在这里解析fieldvalue ,并且根据<strong>xxx</strong>设置这个字段的某个属性，然后拿掉<strong>xxx</strong>,还原原始的fieldvalue</p>
-<blockquote>
-<ul>
-<li>“某个属性”到底是哪个属性</li>
-</ul>
-</blockquote>
-<p>在上文中我们一直提到“某个属性”，但是我们到目前为止还是没有找到这个可以设置的属性到底是啥，但是如果我们不找到这个属性，上面的分析过程全是扯淡的，为了找到这个属性，我们必须知道这个属性满足什么样的特征呢，我们分析下这个属性需要满足的特征</p>
-<blockquote>
-<blockquote>
-<ul>
-<li>这个属性不能对原始的fieldvalue产生变更</li>
-</ul>
-</blockquote>
-</blockquote>
-<p>为什么？按照我们的想法，这个”某个属性“不能对原始的fieldvalue参数影响，如果改变了原始value，</p>
-<blockquote>
-<blockquote>
-<ul>
-<li>这个属性可以必须是跟着term走的，并且可以在tokenizer和filter中可以获取</li>
-</ul>
-</blockquote>
-</blockquote>
-<p>为什么？按照我们的做法，我们必须在某个tokenizer或者filter或者这个属性，才能设置payload的值，其他的地方没发接触到payload </p>
-<p>明确了上述两个特征，我们找个filter／tokenizer的源代码看下 ,找个最简单的<strong>LowerCaseFilter</strong> 看看<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LowerCaseFilter</span> <span class="keyword">extends</span> <span class="title">TokenFilter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Create a new LowerCaseFilter, that normalizes token text to lower case.</span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> in TokenStream to filter</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">LowerCaseFilter</span><span class="params">(TokenStream in)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(in);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">incrementToken</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (input.incrementToken()) &#123;</span><br><span class="line">      CharacterUtils.toLowerCase(termAtt.buffer(), <span class="number">0</span>, termAtt.length());</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>看到这里我们有了答案，原来CharTermAttribute就是Lucene／Solr原来在设定某个term的值的，那么我们可以自己造一个，放入根据<strong>xxx</strong>得到的属性，然后在filter里面或者这个属性，不就可以动态的设定payload的值了嘛， 对头， 上代码 </p>
-<blockquote>
-<ul>
-<li>自定义Solr的Field </li>
-</ul>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicPayloadsField</span> <span class="keyword">extends</span> <span class="title">TextField</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IndexableField <span class="title">createField</span><span class="params">(SchemaField field, Object value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!field.indexed() &amp;&amp; !field.stored()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (log.isTraceEnabled())</span><br><span class="line">                log.trace(<span class="string">"Ignoring unindexed/unstored field: "</span> + field);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String val;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            val = toInternal(value.toString());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> SolrException( SolrException.ErrorCode.SERVER_ERROR, <span class="string">"Error while creating field '"</span> + field + <span class="string">"' from value '"</span> + value + <span class="string">"'"</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (val==<span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        String target = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (val.startsWith(<span class="string">"[|"</span>) &amp;&amp; val.contains(<span class="string">"|]"</span>)) &#123;</span><br><span class="line">            target = val.substring(<span class="number">2</span>,val.indexOf(<span class="string">"|]"</span>));</span><br><span class="line">            <span class="keyword">if</span> (DynamicPayloadAttribute.FIELD_MAPPINGS.containsKey(target)) &#123;</span><br><span class="line">                String parsedData = val.substring(val.indexOf(<span class="string">"|]"</span>)+<span class="number">2</span>);</span><br><span class="line">                TokenizerChain tokenizerChain = (TokenizerChain)field.getType().getIndexAnalyzer();</span><br><span class="line">                Tokenizer tk = tokenizerChain.getTokenizerFactory().create(TokenStream.DEFAULT_TOKEN_ATTRIBUTE_FACTORY);</span><br><span class="line">                TokenStream ts = tk;</span><br><span class="line">                <span class="keyword">for</span> (TokenFilterFactory filter : tokenizerChain.getTokenFilterFactories()) &#123;</span><br><span class="line">                    ts = filter.create(ts);</span><br><span class="line">                &#125;</span><br><span class="line">                Analyzer.TokenStreamComponents components = <span class="keyword">new</span> Analyzer.TokenStreamComponents(tk, ts);</span><br><span class="line">                Reader stringReader = tokenizerChain.initReader(field.getName(),<span class="keyword">new</span> StringReader(parsedData));</span><br><span class="line">                tk.setReader(stringReader);</span><br><span class="line">                TokenStream stream = components.getTokenStream();</span><br><span class="line">                stream.getAttribute(DynamicPayloadAttribute.class).setPayloadType(target);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Field(field.getName(), stream, field);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">super</span>.createField(field.getName(), val, field);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.createField(field.getName(), val, field);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<ul>
-<li>自定义Attribute</li>
-</ul>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DynamicPayloadAttribute</span> <span class="keyword">extends</span> <span class="title">Attribute</span> </span>&#123;</span><br><span class="line">    Map&lt;String,Integer&gt; FIELD_MAPPINGS = <span class="keyword">new</span> HashMap&lt;String,Integer&gt;()&#123;</span><br><span class="line">        &#123;</span><br><span class="line">            put(<span class="string">"A"</span>,<span class="number">0</span>);</span><br><span class="line">            put(<span class="string">"B"</span>,<span class="number">1</span>);</span><br><span class="line">            put(<span class="string">"C"</span>,<span class="number">2</span>);</span><br><span class="line">            put(<span class="string">"D"</span>,<span class="number">3</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    String DEFAULT_PAYLOAD_TYPE = <span class="string">"UNKNOW_PAYLOAD_TYPE"</span>;</span><br><span class="line">    <span class="function">String <span class="title">payloadType</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setPayloadType</span><span class="params">(String type)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">byte</span> <span class="title">getPayLoad</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<ul>
-<li>自定义filter</li>
-</ul>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicPayloadTokenFilter</span> <span class="keyword">extends</span> <span class="title">TokenFilter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PayloadAttribute payAtt = addAttribute(PayloadAttribute.class);</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> DynamicPayloadAttribute dypayAtt = addAttribute(DynamicPayloadAttribute.class);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">DynamicPayloadTokenFilter</span><span class="params">(TokenStream input)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(input);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">incrementToken</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (input.incrementToken()) &#123;</span><br><span class="line">            <span class="keyword">byte</span> payload = dypayAtt.getPayLoad();</span><br><span class="line">            <span class="keyword">if</span>(payload==Byte.MAX_VALUE)&#123;</span><br><span class="line">                payAtt.setPayload(<span class="keyword">null</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">byte</span> array [] = &#123;payload&#125;;</span><br><span class="line">                payAtt.setPayload(<span class="keyword">new</span> BytesRef(array));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里我只放上了重要的代码片段，完整的代码请参考<a href="https://github.com/fengqingleiyue/apache-solr-plugins/tree/master/dynamic-payload" target="_blank" rel="noopener">apache-solr-plugins/dynamic-payload</a></p>
-<h2 id="爬坑指南"><a href="#爬坑指南" class="headerlink" title="爬坑指南"></a><font color="#2C3E50">爬坑指南</font></h2><p>当然如果所有的细节都如上述描述那么简单，那么各位看官肯定觉得无聊死了，所有的程序员朋友们肯定更加关注这个过程中有没有什么坑，当然坑是存在的，坑是痛苦的，爬坑的过程是痛苦的，爬坑是需要分享的。<br>遇到的坑:<br>在Solr的<a href="http://127.0.0.1:8983/solr/#/TEST/documents" target="_blank" rel="noopener">document</a>页面上添加文档是成功的，但是一旦用代码上多线程立马报错（主要的错误就是TokenStream 在调用前没有调用reset方法）<br>在没有修正这个问题之前的<strong>createField</strong>的方法实现为（部分）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (val.startsWith(<span class="string">"[|"</span>) &amp;&amp; val.contains(<span class="string">"|]"</span>)) &#123;</span><br><span class="line">           target = val.substring(<span class="number">2</span>,val.indexOf(<span class="string">"|]"</span>));</span><br><span class="line">           <span class="keyword">if</span> (DynamicPayloadAttribute.FIELD_MAPPINGS.containsKey(target)) &#123;</span><br><span class="line">               String parsedData = val.substring(val.indexOf(<span class="string">"|]"</span>)+<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">               TokenStream stream = field.getType().getIndexAnalyzer().tokenStream(field.getName(),parsedData);</span><br><span class="line">               stream.addAttributeImpl(<span class="keyword">new</span> DynamicPayloadAttributeImpl(target));</span><br><span class="line">               <span class="keyword">return</span> <span class="keyword">new</span> Field(field.getName(),stream,field);</span><br></pre></td></tr></table></figure></p>
-<p>而问题就出现在tokenStream方法上<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">field.getType().getIndexAnalyzer().tokenStream(field.getName(),parsedData);</span><br></pre></td></tr></table></figure></p>
-<p>进入实现可以看到TokenStreamComponents是会重用的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> TokenStream <span class="title">tokenStream</span><span class="params">(String fieldName, String text)</span> </span>&#123;</span><br><span class="line">        Analyzer.TokenStreamComponents components = <span class="keyword">this</span>.reuseStrategy.getReusableComponents(<span class="keyword">this</span>, fieldName);</span><br><span class="line">        ReusableStringReader strReader = components != <span class="keyword">null</span> &amp;&amp; components.reusableStringReader != <span class="keyword">null</span>?components.reusableStringReader:<span class="keyword">new</span> ReusableStringReader();</span><br><span class="line">        strReader.setValue(text);</span><br><span class="line">        Reader r = <span class="keyword">this</span>.initReader(fieldName, strReader);</span><br><span class="line">        <span class="keyword">if</span>(components == <span class="keyword">null</span>) &#123;</span><br><span class="line">            components = <span class="keyword">this</span>.createComponents(fieldName);</span><br><span class="line">            <span class="keyword">this</span>.reuseStrategy.setReusableComponents(<span class="keyword">this</span>, fieldName, components);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        components.setReader(r);</span><br><span class="line">        components.reusableStringReader = strReader;</span><br><span class="line">        <span class="keyword">return</span> components.getTokenStream();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样做的好处就是不用重复生成tokenstream compents，并且不同的只是输入，其他的都是一样的，但是为啥在我们的应用场景就会报错呢，原来错误不再我们的使用方式上，而是在solr的后续的流程中会调用<strong>Field.tokenStream</strong>方法，并且在<strong>tokenStream</strong>属性不为空的情况下，就会直接return，所以想象下，如果同一个字段的不同值公用了同一个tokenstream属性，那么针对这个tokenstream设定的不同值，只会在最后一个调用的属性会成功。（显然这和我们的期望相违背）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> TokenStream <span class="title">tokenStream</span><span class="params">(Analyzer analyzer, TokenStream reuse)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.fieldType().indexOptions() == IndexOptions.NONE) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(!<span class="keyword">this</span>.fieldType().tokenized()) &#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">this</span>.stringValue() != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span>(!(reuse <span class="keyword">instanceof</span> Field.StringTokenStream)) &#123;</span><br><span class="line">                    reuse = <span class="keyword">new</span> Field.StringTokenStream();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                ((Field.StringTokenStream)reuse).setValue(<span class="keyword">this</span>.stringValue());</span><br><span class="line">                <span class="keyword">return</span> (TokenStream)reuse;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.binaryValue() != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span>(!(reuse <span class="keyword">instanceof</span> Field.BinaryTokenStream)) &#123;</span><br><span class="line">                    reuse = <span class="keyword">new</span> Field.BinaryTokenStream();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                ((Field.BinaryTokenStream)reuse).setValue(<span class="keyword">this</span>.binaryValue());</span><br><span class="line">                <span class="keyword">return</span> (TokenStream)reuse;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Non-Tokenized Fields must have a String value"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.tokenStream != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.tokenStream;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.readerValue() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> analyzer.tokenStream(<span class="keyword">this</span>.name(), <span class="keyword">this</span>.readerValue());</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.stringValue() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> analyzer.tokenStream(<span class="keyword">this</span>.name(), <span class="keyword">this</span>.stringValue());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Field must have either TokenStream, String, Reader or Number value; got "</span> + <span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>但是即使这样，也不应该会报错，原来如果在create field字段中调用<strong>tokenstream</strong>方法，那么针对多值字段，那么同一个<strong>tokenstream</strong>对象就有可能可能共享，那么当Solr处理完第一个值结束的时候会将tokenstream进行重制，那么原有的reader就会失效，那么当Solr开始处理第二个值的时候由于共享的同一个tokenstream,那么对用的reader已经失效，就会抛出错误。所以我们需要每次生成不同的tokenstream就可以解决问题<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (val.startsWith(<span class="string">"[|"</span>) &amp;&amp; val.contains(<span class="string">"|]"</span>)) &#123;</span><br><span class="line">            target = val.substring(<span class="number">2</span>,val.indexOf(<span class="string">"|]"</span>));</span><br><span class="line">            <span class="keyword">if</span> (DynamicPayloadAttribute.FIELD_MAPPINGS.containsKey(target)) &#123;</span><br><span class="line">                String parsedData = val.substring(val.indexOf(<span class="string">"|]"</span>)+<span class="number">2</span>);</span><br><span class="line">                TokenizerChain tokenizerChain = (TokenizerChain)field.getType().getIndexAnalyzer();</span><br><span class="line">                Tokenizer tk = tokenizerChain.getTokenizerFactory().create(TokenStream.DEFAULT_TOKEN_ATTRIBUTE_FACTORY);</span><br><span class="line">                TokenStream ts = tk;</span><br><span class="line">                <span class="keyword">for</span> (TokenFilterFactory filter : tokenizerChain.getTokenFilterFactories()) &#123;</span><br><span class="line">                    ts = filter.create(ts);</span><br><span class="line">                &#125;</span><br><span class="line">                Analyzer.TokenStreamComponents components = <span class="keyword">new</span> Analyzer.TokenStreamComponents(tk, ts);</span><br><span class="line">                Reader stringReader = tokenizerChain.initReader(field.getName(),<span class="keyword">new</span> StringReader(parsedData));</span><br><span class="line">                tk.setReader(stringReader);</span><br><span class="line">                TokenStream stream = components.getTokenStream();</span><br><span class="line">                stream.getAttribute(DynamicPayloadAttribute.class).setPayloadType(target);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Field(field.getName(), stream, field);</span><br></pre></td></tr></table></figure></p>
-<h2 id="参考的项目或者文章"><a href="#参考的项目或者文章" class="headerlink" title="参考的项目或者文章"></a><font color="#2C3E50">参考的项目或者文章</font></h2><p><a href="https://lucidworks.com/post/solr-payloads/" target="_blank" rel="noopener">SolrPayload 功能 Example</a><br><a href="https://lucene.apache.org/solr/guide/7_4/filter-descriptions.html#numeric-payload-token-filter" target="_blank" rel="noopener">Solr Numeric Payload Token Filter</a></p>
-
-          
+          <h1 id="如何动态设置Solr-Payload"><a href="#如何动态设置Solr-Payload" class="headerlink" title="如何动态设置Solr Payload "></a><font color="#0077bb">如何动态设置Solr Payload </font></h1><h2 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a><font color="#2C3E50">问题背景</font></h2><p>Solr 从6.x开始提供了index payload的功能，（payload是指可以指定为分词之后的每个term指定一个二进制的信息，用于针对每个term作出一定的行为，例如可以用来存储指定的score用于排序，也可以用来存储指定的数据，用于检查term的一定的检查），简单的查阅官方文档之后（这里使用solr7.7.2作为样例）,得知我们可以动态的设定每个term的payload（参考<a href="https://lucidworks.com/post/end-to-end-payload-example-in-solr/" target="_blank" rel="noopener">SolrPayload</a>），也可以根据指定的token type设置payload数值(参考<a href="https://lucene.apache.org/solr/guide/7_4/filter-descriptions.html#numeric-payload-token-filter" target="_blank" rel="noopener">Numeric Payload Token Filter</a>)，但是上述两种方式都无法根据输入的变化而动态的改变payload的值。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/10/SolrPayLoads/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
-    </div>
+    </p></div>
     
     
     
@@ -663,8 +536,10 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="FQL">
+            
               <p class="site-author-name" itemprop="name">FQL</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">一个专注为什么的博客</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -704,6 +579,22 @@
             </div>
           
 
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fengqingleiyue" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:fengqingleiyue@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
           
 
           
@@ -749,7 +640,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
@@ -848,6 +739,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
 
   
 
