@@ -13,7 +13,8 @@
 <meta name="theme-color" content="#222">
 <meta name="google-site-verification" content="PFZ6yqxOFdQdNik1n9IHV58-4M7-BgXxFul8LRPCBfE">
 <meta name="google-site-verification" content="oOLLlne5ID1zvCYfOmEmCraUcgVCME27VIB4MuKyXYQ">
-<meta name="baidu-site-verification" content="rFgOzSpXHJ" />
+
+
 
 
   
@@ -264,6 +265,131 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengqingleiyue.github.io/2019/10/01/solr-source-code-debug/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FQL">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="态度决定高度,细节决定成败">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/01/solr-source-code-debug/" itemprop="url">玩转Solr源码之(二)Solr源码Debug</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T22:19:40+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="玩转Solr源码之–Solr源码Debug"><a href="#玩转Solr源码之–Solr源码Debug" class="headerlink" title="玩转Solr源码之–Solr源码Debug"></a><font color="#0077bb">玩转Solr源码之–Solr源码Debug</font></h1><p>这篇文章是<strong>玩转Solr源码</strong>系列的第二篇，紧接着上一篇的<a href="http://www.fengqinglei.top/2019/10/01/solr-source-code-import/" target="_blank" rel="noopener">源码导入</a>，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看<strong>源码导入</strong>的部分。</p>
+<h2 id="定位源码入口"><a href="#定位源码入口" class="headerlink" title="定位源码入口"></a><font color="#2C3E50">定位源码入口</font></h2><p>Solr 的源码入口为<strong>org.apache.solr.client.solrj.StartSolrJetty</strong>,主方法也比较简短,<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/10/01/solr-source-code-debug/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </p></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://fengqingleiyue.github.io/2019/10/01/solr-source-code-import/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -283,7 +409,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/10/01/solr-source-code-import/" itemprop="url">Solr入门之(一)Solr源码导入IDE</a></h1>
+                <a class="post-title-link" href="/2019/10/01/solr-source-code-import/" itemprop="url">玩转Solr源码之(一)Solr源码导入IDE</a></h1>
         
 
         <div class="post-meta">
@@ -334,17 +460,14 @@
 
       
         
-          <h1 id="Solr入门之—Solr源码导入IDE"><a href="#Solr入门之—Solr源码导入IDE" class="headerlink" title="Solr入门之—Solr源码导入IDE"></a><font color="#0077bb">Solr入门之—Solr源码导入IDE</font></h1><h2 id="源码下载"><a href="#源码下载" class="headerlink" title="源码下载"></a><font color="#2C3E50">源码下载</font></h2><p>这个比较简单,直接到solr的官网上下载源码即可,这里以<a href="https://www.apache.org/dyn/closer.lua/lucene/solr/7.7.2/solr-7.7.2-src.tgz" target="_blank" rel="noopener">Solr 7.7.2</a>为例子。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">"https://www.apache.org/dyn/closer.lua/lucene/solr/7.7.2/solr-7.7.2-src.tgz"</span> -o solr-7.7.2-src.tgz &amp;&amp; tar -xvf solr-7.7.2-src.tgz</span><br></pre></td></tr></table></figure></p>
+          <h1 id="玩转Solr源码之–Solr源码导入IDE"><a href="#玩转Solr源码之–Solr源码导入IDE" class="headerlink" title="玩转Solr源码之–Solr源码导入IDE"></a><font color="#0077bb">玩转Solr源码之–Solr源码导入IDE</font></h1><h2 id="源码下载"><a href="#源码下载" class="headerlink" title="源码下载"></a><font color="#2C3E50">源码下载</font></h2><p>这个比较简单,直接到solr的官网上下载源码即可,这里以<a href="https://www.apache.org/dyn/closer.lua/lucene/solr/7.7.2/solr-7.7.2-src.tgz" target="_blank" rel="noopener">Solr 7.7.2</a>为例子。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">"https://www.apache.org/dyn/closer.lua/lucene/solr/7.7.2/solr-7.7.2-src.tgz"</span> -o solr-7.7.2-src.tgz &amp;&amp; tar -xvf solr-7.7.2-src.tgz</span><br></pre></td></tr></table></figure></p>
 <h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a><font color="#2C3E50">安装依赖</font></h2><blockquote>
 <ul>
 <li>jdk 1.8 </li>
 <li>ant</li>
 </ul>
 </blockquote>
-<p>笔者使用的是RedHat 系统，所以jdk的安装直接使用yum就行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install  java-1.8.0-openjdk-devel.x86_64</span><br></pre></td></tr></table></figure></p>
-<p>ant需要配置一下环境，也不算复杂<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">"http://mirrors.tuna.tsinghua.edu.cn/apache//ant/binaries/apache-ant-1.9.14-bin.tar.gz"</span> -o apache-ant-1.9.14-bin.tar.gz</span><br><span class="line">tar -xvf apache-ant-1.9.14-bin.tar.gz</span><br><span class="line">rm -rf apache-ant-1.9.14-bin.tar.gz</span><br></pre></td></tr></table></figure></p>
-<p>配置环境变量(以RedHat为例),追加以下信息到~/.bash_profile (~/.bash_profile)，这里我把ant安装到了/opt目录下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> ANT_HOME=/opt/apache-ant-1.9.14</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$ANT_HOME</span>/bin</span><br></pre></td></tr></table></figure></p>
-<p>简单验证下，看到以下结果就算ok了(source ~/.bash_profile 是为了使刚刚的配置生效)<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$source</span> ~/.bash_profile</span><br><span class="line"><span class="variable">$ant</span> -version</span><br><span class="line">Apache Ant(TM) version 1.9.14 compiled on March 12 2019</span><br></pre></td></tr></table></figure></p>
+<p>笔者使用的是RedHat 系统，所以jdk的安装直接使用yum就行<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/10/01/solr-source-code-import/#more" rel="contents">
@@ -354,7 +477,7 @@
           <!--/noindex-->
         
       
-    </div>
+    </p></div>
     
     
     
@@ -682,7 +805,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -695,7 +818,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
