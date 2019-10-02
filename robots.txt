@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Allow: /archives/ 
+
+Disallow: /js/
+Disallow: /css/
+Disallow: /fonts/
+Disallow: /vendors/
+Disallow: /fancybox/
+
+Sitemap: https://www.fengqinglei.top/sitemap.xml
+Sitemap: https://www.fengqinglei.top/baidusitemap.xml
