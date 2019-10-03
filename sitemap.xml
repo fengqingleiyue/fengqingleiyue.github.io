@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.fengqinglei.top/2019/10/01/solr-source-code-import/</loc>
+    <loc>https://www.fengqinglei.top/2019/10/03/solr-source-code-deploy/</loc>
     
-    <lastmod>2019-10-02T13:30:57.770Z</lastmod>
+    <lastmod>2019-10-03T08:30:56.061Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://www.fengqinglei.top/2019/10/01/solr-source-code-debug/</loc>
     
-    <lastmod>2019-10-02T13:30:20.684Z</lastmod>
+    <lastmod>2019-10-03T02:33:08.974Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.fengqinglei.top/2019/10/01/solr-source-code-import/</loc>
+    
+    <lastmod>2019-10-02T13:30:57.770Z</lastmod>
     
   </url>
   
