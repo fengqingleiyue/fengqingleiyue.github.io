@@ -92,18 +92,18 @@
 
 
 
-<meta name="description" content="玩转Solr源码之—Solr源码Debug这篇文章是玩转Solr源码系列的第二篇，紧接着上一篇的源码导入，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看源码导入的部分。 定位源码入口Solr 的源码入口为org.apache.solr.client.solrj.StartSolrJetty,主方法也比较简短,">
+<meta name="description" content="玩转Solr源码之–Solr源码Debug这篇文章是玩转Solr源码系列的第二篇，紧接着上一篇的源码导入，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看源码导入的部分。 定位源码入口Solr 的源码入口为org.apache.solr.client.solrj.StartSolrJetty,主方法也比较简短,">
 <meta name="keywords" content="Solr,Debug,源码,调试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="玩转Solr源码之(二)Solr源码Debug">
 <meta property="og:url" content="https://www.fengqinglei.top/2019/10/01/solr-source-code-debug/index.html">
 <meta property="og:site_name" content="态度决定高度,细节决定成败">
-<meta property="og:description" content="玩转Solr源码之—Solr源码Debug这篇文章是玩转Solr源码系列的第二篇，紧接着上一篇的源码导入，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看源码导入的部分。 定位源码入口Solr 的源码入口为org.apache.solr.client.solrj.StartSolrJetty,主方法也比较简短,">
+<meta property="og:description" content="玩转Solr源码之–Solr源码Debug这篇文章是玩转Solr源码系列的第二篇，紧接着上一篇的源码导入，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看源码导入的部分。 定位源码入口Solr 的源码入口为org.apache.solr.client.solrj.StartSolrJetty,主方法也比较简短,">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-10-03T02:33:08.974Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="玩转Solr源码之(二)Solr源码Debug">
-<meta name="twitter:description" content="玩转Solr源码之—Solr源码Debug这篇文章是玩转Solr源码系列的第二篇，紧接着上一篇的源码导入，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看源码导入的部分。 定位源码入口Solr 的源码入口为org.apache.solr.client.solrj.StartSolrJetty,主方法也比较简短,">
+<meta name="twitter:description" content="玩转Solr源码之–Solr源码Debug这篇文章是玩转Solr源码系列的第二篇，紧接着上一篇的源码导入，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看源码导入的部分。 定位源码入口Solr 的源码入口为org.apache.solr.client.solrj.StartSolrJetty,主方法也比较简短,">
 
 
 
@@ -362,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  742 字
+                  743 字
                 </span>
               
 
@@ -399,19 +399,19 @@
       
 
       
-        <h1 id="玩转Solr源码之—Solr源码Debug"><a href="#玩转Solr源码之—Solr源码Debug" class="headerlink" title="玩转Solr源码之—Solr源码Debug"></a><font color="#0077bb">玩转Solr源码之—Solr源码Debug</font></h1><p>这篇文章是<strong>玩转Solr源码</strong>系列的第二篇，紧接着上一篇的<a href="https://www.fengqinglei.top/2019/10/01/solr-source-code-import/">源码导入</a>，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看<strong>源码导入</strong>的部分。</p>
+        <h1 id="玩转Solr源码之–Solr源码Debug"><a href="#玩转Solr源码之–Solr源码Debug" class="headerlink" title="玩转Solr源码之–Solr源码Debug"></a><font color="#0077bb">玩转Solr源码之–Solr源码Debug</font></h1><p>这篇文章是<strong>玩转Solr源码</strong>系列的第二篇，紧接着上一篇的<a href="https://www.fengqinglei.top/2019/10/01/solr-source-code-import/">源码导入</a>，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看<strong>源码导入</strong>的部分。</p>
 <h2 id="定位源码入口"><a href="#定位源码入口" class="headerlink" title="定位源码入口"></a><font color="#2C3E50">定位源码入口</font></h2><p>Solr 的源码入口为<strong>org.apache.solr.client.solrj.StartSolrJetty</strong>,主方法也比较简短,<br><a id="more"></a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String[] args )</span> </span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="comment">//System.setProperty("solr.solr.home", "../../../example/solr");</span></span><br><span class="line"></span><br><span class="line">    Server server = <span class="keyword">new</span> Server();</span><br><span class="line">    ServerConnector connector = <span class="keyword">new</span> ServerConnector(server, <span class="keyword">new</span> HttpConnectionFactory());</span><br><span class="line">    <span class="comment">// Set some timeout options to make debugging easier.</span></span><br><span class="line">    connector.setIdleTimeout(<span class="number">1000</span> * <span class="number">60</span> * <span class="number">60</span>);</span><br><span class="line">    connector.setSoLingerTime(-<span class="number">1</span>);</span><br><span class="line">    connector.setPort(<span class="number">8983</span>);</span><br><span class="line">    server.setConnectors(<span class="keyword">new</span> Connector[] &#123; connector &#125;);</span><br><span class="line">    </span><br><span class="line">    WebAppContext bb = <span class="keyword">new</span> WebAppContext();</span><br><span class="line">    bb.setServer(server);</span><br><span class="line">    bb.setContextPath(<span class="string">"/solr"</span>);</span><br><span class="line">    bb.setWar(<span class="string">"webapp/web"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//    // START JMX SERVER</span></span><br><span class="line"><span class="comment">//    if( true ) &#123;</span></span><br><span class="line"><span class="comment">//      MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();</span></span><br><span class="line"><span class="comment">//      MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);</span></span><br><span class="line"><span class="comment">//      server.getContainer().addEventListener(mBeanContainer);</span></span><br><span class="line"><span class="comment">//      mBeanContainer.start();</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line">    </span><br><span class="line">    server.setHandler(bb);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      System.out.println(<span class="string">"&gt;&gt;&gt; STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP"</span>);</span><br><span class="line">      server.start();</span><br><span class="line">      <span class="keyword">while</span> (System.in.available() == <span class="number">0</span>) &#123;</span><br><span class="line">        Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      server.stop();</span><br><span class="line">      server.join();</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">      System.exit(<span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
 <h2 id="配置Solr-Home"><a href="#配置Solr-Home" class="headerlink" title="配置Solr Home"></a><font color="#2C3E50">配置Solr Home</font></h2><p>为了能够进行源码的bug，我们需要配置好solr_home,这里我们可以直接使用官方的Solr发行包中的example来做演示（真实的开发中，一般会有自己定义好的solr_home），直接下载solr的发行包(这里以solr-7.7.2为例子)<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Documents</span><br><span class="line">curl <span class="string">"http://mirrors.tuna.tsinghua.edu.cn/apache/lucene/solr/7.7.2/solr-7.7.2.tgz"</span> -o solr-7.7.2.tgz &amp;&amp; tar -xvf solr-7.7.2.tgz</span><br><span class="line">mkdir solr_home &amp;&amp; <span class="built_in">cd</span> solr_home</span><br><span class="line">cp ~/Documents/solr-7.7.2/server/solr/solr.xml ./</span><br><span class="line">cp -r ~/Documents/solr-7.7.2/server/solr/configsets/sample_techproducts_configs ./</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"collection=TEST"</span> &gt; sample_techproducts_configs/core.properties</span><br></pre></td></tr></table></figure></p>
 <p>这里简单解释下最后一个命令(echo “collection=TEST …”)的含义,Solr中有collection和core的概念。</p>
 <blockquote>
 <ul>
 <li>Collection<br>Solr中的collection由一个或者多个core组成，一个collection对应一份独立的config，在单节点的模式下，core和collection是等价的,在集群模式下，一个collection会有多个分片(shard)组成，每个分片又可以又多个副本(replica),每个shard对应一个core</li>
-<li>core<br>Solr中的core是一个包含index和config的运行实例<h2 id="配置StartSolrJetty"><a href="#配置StartSolrJetty" class="headerlink" title="配置StartSolrJetty"></a><font color="#2C3E50">配置StartSolrJetty</font></h2>solr中的solr_home 可以通过通过环境变量进行设置，直接上代码<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setProperty(<span class="string">"solr.solr.home"</span>, <span class="string">"/home/fql/Documents/solr_home"</span>);</span><br></pre></td></tr></table></figure>
-</li>
+<li>core<br>Solr中的core是一个包含index和config的运行实例</li>
 </ul>
 </blockquote>
+<h2 id="配置StartSolrJetty"><a href="#配置StartSolrJetty" class="headerlink" title="配置StartSolrJetty"></a><font color="#2C3E50">配置StartSolrJetty</font></h2><p>solr中的solr_home 可以通过通过环境变量进行设置，直接上代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setProperty(<span class="string">"solr.solr.home"</span>, <span class="string">"/home/fql/Documents/solr_home"</span>);</span><br></pre></td></tr></table></figure></p>
 <p>还有一个地方需要改动，否则程序无法正常启动，直接上代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bb.setWar(<span class="string">"webapp/web"</span>); ==&gt; bb.setWar(<span class="string">"solr/webapp/web"</span>);</span><br></pre></td></tr></table></figure></p>
-<p>设置完毕之后就可以启动<strong>StartSolrJetty</strong>后直接在浏览器中输入<a href="http://127.0.0.1:8983/solr就可以开始畅游solr的源码啦.![本地访问](https://s2.ax1x.com/2019/10/02/udq8Tx.png" target="_blank" rel="noopener">http://127.0.0.1:8983/solr就可以开始畅游solr的源码啦.![本地访问](https://s2.ax1x.com/2019/10/02/udq8Tx.png</a>)</p>
+<p>设置完毕之后就可以启动<strong>StartSolrJetty</strong>后直接在浏览器中输入<a href="http://127.0.0.1:8983/solr就可以开始畅游solr的源码啦.![本地访问](https://s2.ax1x.com/2019/10/02/udq8Tx.png)" target="_blank" rel="noopener">http://127.0.0.1:8983/solr就可以开始畅游solr的源码啦.![本地访问](https://s2.ax1x.com/2019/10/02/udq8Tx.png)</a></p>
 <h3 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a><font color="#2C3E50">小技巧</font></h3><p>StartSolrJetty默认的配置是没有太多的日志输出的，但是既然我们都已经开始debug solr的源代码了，还是输出更多的日志帮助我们更好的分析源码吧，同样，开启debug日志的代码也比较简单<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setProperty(<span class="string">"log4j2.debug"</span>,<span class="string">"true"</span>);</span><br></pre></td></tr></table></figure></p>
 <p>这样我们就剋有看到所有的日志啦。下一篇我们将要介绍如果将修改过的solr源码部署到公司或者个人的nexus仓库,也是本系列的最后一篇。</p>
 
@@ -544,7 +544,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -557,7 +557,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -613,7 +613,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#玩转Solr源码之—Solr源码Debug"><span class="nav-number">1.</span> <span class="nav-text">玩转Solr源码之—Solr源码Debug</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定位源码入口"><span class="nav-number">1.1.</span> <span class="nav-text">定位源码入口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Solr-Home"><span class="nav-number">1.2.</span> <span class="nav-text">配置Solr Home</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置StartSolrJetty"><span class="nav-number">1.3.</span> <span class="nav-text">配置StartSolrJetty</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小技巧"><span class="nav-number">1.3.1.</span> <span class="nav-text">小技巧</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#玩转Solr源码之–Solr源码Debug"><span class="nav-number">1.</span> <span class="nav-text">玩转Solr源码之–Solr源码Debug</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定位源码入口"><span class="nav-number">1.1.</span> <span class="nav-text">定位源码入口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Solr-Home"><span class="nav-number">1.2.</span> <span class="nav-text">配置Solr Home</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置StartSolrJetty"><span class="nav-number">1.3.</span> <span class="nav-text">配置StartSolrJetty</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小技巧"><span class="nav-number">1.3.1.</span> <span class="nav-text">小技巧</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

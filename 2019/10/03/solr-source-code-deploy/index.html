@@ -92,13 +92,13 @@
 
 
 
-<meta name="description" content="玩转Solr源码之—Solr源码Deploy这篇文章是玩转Solr源码系列的第三篇，紧接着上一篇的源码Deug。如果你已经修改好了源码，并且调试ok，想要将源码打包后分发给同时或者其他项目引用，那么这边文章一定能够帮助你。">
+<meta name="description" content="玩转Solr源码之–Solr源码Deploy这篇文章是玩转Solr源码系列的第三篇，紧接着上一篇的源码Deug。如果你已经修改好了源码，并且调试ok，想要将源码打包后分发给同时或者其他项目引用，那么这边文章一定能够帮助你。">
 <meta name="keywords" content="Solr,源码,Deploy,部署,Nexus,Maven">
 <meta property="og:type" content="article">
 <meta property="og:title" content="玩转Solr源码之(三)Solr源码Deploy">
 <meta property="og:url" content="https://www.fengqinglei.top/2019/10/03/solr-source-code-deploy/index.html">
 <meta property="og:site_name" content="态度决定高度,细节决定成败">
-<meta property="og:description" content="玩转Solr源码之—Solr源码Deploy这篇文章是玩转Solr源码系列的第三篇，紧接着上一篇的源码Deug。如果你已经修改好了源码，并且调试ok，想要将源码打包后分发给同时或者其他项目引用，那么这边文章一定能够帮助你。">
+<meta property="og:description" content="玩转Solr源码之–Solr源码Deploy这篇文章是玩转Solr源码系列的第三篇，紧接着上一篇的源码Deug。如果你已经修改好了源码，并且调试ok，想要将源码打包后分发给同时或者其他项目引用，那么这边文章一定能够帮助你。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://s2.ax1x.com/2019/10/03/uwD7dI.jpg">
 <meta property="og:image" content="https://s2.ax1x.com/2019/10/03/uwRhqS.png">
@@ -107,7 +107,7 @@
 <meta property="og:updated_time" content="2019-10-03T08:30:56.061Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="玩转Solr源码之(三)Solr源码Deploy">
-<meta name="twitter:description" content="玩转Solr源码之—Solr源码Deploy这篇文章是玩转Solr源码系列的第三篇，紧接着上一篇的源码Deug。如果你已经修改好了源码，并且调试ok，想要将源码打包后分发给同时或者其他项目引用，那么这边文章一定能够帮助你。">
+<meta name="twitter:description" content="玩转Solr源码之–Solr源码Deploy这篇文章是玩转Solr源码系列的第三篇，紧接着上一篇的源码Deug。如果你已经修改好了源码，并且调试ok，想要将源码打包后分发给同时或者其他项目引用，那么这边文章一定能够帮助你。">
 <meta name="twitter:image" content="https://s2.ax1x.com/2019/10/03/uwD7dI.jpg">
 
 
@@ -404,14 +404,13 @@
       
 
       
-        <h1 id="玩转Solr源码之—Solr源码Deploy"><a href="#玩转Solr源码之—Solr源码Deploy" class="headerlink" title="玩转Solr源码之—Solr源码Deploy"></a><font color="#0077bb">玩转Solr源码之—Solr源码Deploy</font></h1><p>这篇文章是<strong>玩转Solr源码</strong>系列的第三篇，紧接着上一篇的<a href="https://www.fengqinglei.top/2019/10/01/solr-source-code-debug/">源码Deug</a>。如果你已经修改好了源码，并且调试ok，想要将源码打包后分发给同时或者其他项目引用，那么这边文章一定能够帮助你。<br><a id="more"></a></p>
+        <h1 id="玩转Solr源码之–Solr源码Deploy"><a href="#玩转Solr源码之–Solr源码Deploy" class="headerlink" title="玩转Solr源码之–Solr源码Deploy"></a><font color="#0077bb">玩转Solr源码之–Solr源码Deploy</font></h1><p>这篇文章是<strong>玩转Solr源码</strong>系列的第三篇，紧接着上一篇的<a href="https://www.fengqinglei.top/2019/10/01/solr-source-code-debug/">源码Deug</a>。如果你已经修改好了源码，并且调试ok，想要将源码打包后分发给同时或者其他项目引用，那么这边文章一定能够帮助你。<br><a id="more"></a></p>
 <h2 id="不到万不得己，别直接改源代码"><a href="#不到万不得己，别直接改源代码" class="headerlink" title="不到万不得己，别直接改源代码"></a><font color="#0077bb">不到万不得己，别直接改源代码</font></h2><p>一般而言，如果将Solr/Elasticsearch应用于企业级开发，Solr原生的功能或多或少都不能100%的满足企业的业务需求(客户的需求都是比较变态的),这也使得我们有的时候不得不通过修改源代码的方式来达到我们的目的，改源码难，管理源代码更难，毕竟几万甚至几十万的行的Solr源码，你只动了其中一个类中的某一个方法，结果为了管理，你需要专门搞个git仓库，然后还要定义好版本号，放到nexus仓库给其他组员或者其他项目引用，改代码可能花了你一个小时，但是管理这些代码可能需要让你忙活一个上午。所以不到万不得已尽量通过继承/实现等方式来修改源码，这样在版本升级的时候，工作量会小很多。否则的话，干过的人都知道很痛苦，特别是上一个改了源码的人已经离职了。<br><img src="https://s2.ax1x.com/2019/10/03/uwD7dI.jpg" alt="uwD7dI.jpg"></p>
 <h2 id="从源码到Nexus"><a href="#从源码到Nexus" class="headerlink" title="从源码到Nexus"></a><font color="#0077bb">从源码到Nexus</font></h2><p>笔者所在的公司Java开发使用的构建和依赖管理工具是Maven,仓库的话使用的是自建的nexus,我相信这也是大部分公司的模式，当然也有用Gradle，这里不比较两个工具的好坏，能完成开发，高效率并且使用的顺手的都是好工具。笔者这里以maven+ nexus为例。</p>
 <h3 id="安装Nexus"><a href="#安装Nexus" class="headerlink" title="安装Nexus"></a><font color="#0077bb">安装Nexus</font></h3><p>大部分情况下，nexus仓库这种工作都是交给运维去搞的，一般开发只需要知道如何使用就行，如果你对安装nexus没有任何兴趣，那么这部分可以选择跳过。<br>为了方便演示，这里笔者使用了docker进行安装和部署nexus，流程比较简单，几行命令就行了,这里以<a href="https://hub.docker.com/r/sonatype/nexus/" target="_blank" rel="noopener">nexus2</a>为例子.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull sonatype/nexus</span><br><span class="line">docker run -d -p 8081:8081 --name nexus-oss sonatype/nexus</span><br></pre></td></tr></table></figure></p>
 <p>打开浏览器输入<strong><a href="http://127.0.0.1:8081/nexus" target="_blank" rel="noopener">http://127.0.0.1:8081/nexus</a></strong>就可以看到nexuys界面啦，默认的登陆用户名和密码为admin,admin123<br><img src="https://s2.ax1x.com/2019/10/03/uwRhqS.png" alt="Nexus2"></p>
 <h3 id="使用ant生成maven-artifacts并上传"><a href="#使用ant生成maven-artifacts并上传" class="headerlink" title="使用ant生成maven artifacts并上传"></a><font color="#0077bb">使用ant生成maven artifacts并上传</font></h3><p>Solr中的源码已经支持生成maven artifacets并且上传到自定义的仓库中，简单的命令为<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ant -Dversion=my-special-version -Dm2.repository.id=my-repo-id \</span><br><span class="line">          -Dm2.repository.url=https://example.org/my/repo \</span><br><span class="line">          generate-maven-artifacts</span><br></pre></td></tr></table></figure></p>
 <p>这里解释下参数的含义</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -434,7 +433,6 @@
 </tr>
 </tbody>
 </table>
-</div>
 <p>具体的可以参考文档<a href="https://github.com/apache/lucene-solr/blob/master/dev-tools/maven/README.maven" target="_blank" rel="noopener">Lucene/Solr Maven build instructions</a>。<br>到这里大家基本上已经知道如是将修改过后的solr源代码打包并且上传maven了吧，废话不多说，直接上命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[fql@localhost solr-7.7.2]$ ant -Dversion=TEST -Dm2.repository.id=nexus -Dm2.repository.url=http://127.0.0.1:8081/nexus/content/repositories/releases/ generate-maven-artifacts</span><br><span class="line">Buildfile: /home/fql/IdeaProjects/solr-7.7.2/build.xml</span><br><span class="line"></span><br><span class="line">BUILD FAILED</span><br><span class="line">/home/fql/IdeaProjects/solr-7.7.2/build.xml:21: The following error occurred <span class="keyword">while</span> executing this line:</span><br><span class="line">/home/fql/IdeaProjects/solr-7.7.2/lucene/common-build.xml:63: If you pass -Dversion=... to <span class="built_in">set</span> a release version, it must match <span class="string">"7.7.2"</span>, optionally followed by a suffix (e.g., <span class="string">"-SNAPSHOT"</span>).</span><br><span class="line"></span><br><span class="line">Total time: 0 seconds</span><br></pre></td></tr></table></figure></p>
 <p>擦，&lt;一顿操作猛如虎，定睛一看原地杵&gt;,原来version的名称海必须匹配<strong>7.7.2</strong>,好吧，再来<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[fql@localhost solr-7.7.2]$ ant -Dversion=7.7.2-TEST -Dm2.repository.id=nexus -Dm2.repository.url=http://127.0.0.1:8081/nexus/content/repositories/releases/ generate-maven-artifacts</span><br><span class="line">Buildfile: /home/fql/IdeaProjects/solr-7.7.2/build.xml</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">[artifact:deploy] Error deploying artifact <span class="string">'org.apache.lucene:lucene-solr-grandparent:pom'</span>: Error deploying artifact: Failed to transfer file: http://127.0.0.1:8081/nexus/content/repositories/releases/org/apache/lucene/lucene-solr-grandparent/7.7.2-TEST/lucene-solr-grandparent-7.7.2-TEST.pom. Return code is: 401</span><br><span class="line"></span><br><span class="line">BUILD FAILED</span><br><span class="line">/home/fql/IdeaProjects/solr-7.7.2/build.xml:209: The following error occurred <span class="keyword">while</span> executing this line:</span><br><span class="line">/home/fql/IdeaProjects/solr-7.7.2/lucene/build.xml:404: The following error occurred <span class="keyword">while</span> executing this line:</span><br><span class="line">/home/fql/IdeaProjects/solr-7.7.2/lucene/common-build.xml:656: Error deploying artifact <span class="string">'org.apache.lucene:lucene-solr-grandparent:pom'</span>: Error deploying artifact: Failed to transfer file: http://127.0.0.1:8081/nexus/content/repositories/releases/org/apache/lucene/lucene-solr-grandparent/7.7.2-TEST/lucene-solr-grandparent-7.7.2-TEST.pom. Return code is: 401</span><br><span class="line">Total time: 8 minutes 53 seconds</span><br></pre></td></tr></table></figure></p>
 <p><strong>Return code is: 401</strong>,貌似权限不对，确实命令中没有传任何用户名和密码的信息，这里通过<strong>generate-maven-artifacts</strong>定位到solr-7.7.2/lucene/common-build.xml 文件中的<strong>m2-deploy</strong>(第646行)，并且在其下面的<strong>remoteRepository</strong>添加<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">authentication</span> <span class="attr">username</span>=<span class="string">"admin"</span> <span class="attr">password</span>=<span class="string">"admin123"</span>/&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- admin 和admin123 就是nexus的默认用户名和密码--&gt;</span></span><br></pre></td></tr></table></figure></p>
@@ -454,7 +452,7 @@
 <li>如何定位到<strong>authentication</strong><br>虽然解决<strong>401</strong>这个问题只需要一行代码就行了，但是找到这行代码笔者确实花了很长的时间，最终我找到了关于<a href="https://maven.apache.org/ant-tasks/reference.html#remoteRepository" target="_blank" rel="noopener">remoteRepository</a>的定义才找到<strong>authentication</strong>(一看名字就知道这货是用来传用户名和密码的),最终在文档中定位了其配置在(<a href="http://maven.apache.org/ref/3.6.2/maven-settings/settings.html#class_server)，最终经过一番尝试才成功，太坑了。" target="_blank" rel="noopener">http://maven.apache.org/ref/3.6.2/maven-settings/settings.html#class_server)，最终经过一番尝试才成功，太坑了。</a><br>当然还有一种方法，就是下载ant的源码看在源码中这个case 到底是如何执行了<strong>应该</strong>也能找到这个解法</li>
 </ul>
 </blockquote>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><font color="#0077bb">总结</font></h2><p>到这里玩转Solr源码系列就完全结束了，虽然内容不多，但是全是干货(毕竟是笔者一步一个坑爬过来的)。如果你对该系列有补充或者更好的意见可以联系Email:fengqingleiyue@163.com<br>最后来碗鸡汤:&lt;<strong>你能走多远,取决于你填坑能力有多强</strong>&gt;<br><img src="https://s2.ax1x.com/2019/10/03/uwX5Zj.jpg" alt="uwX5Zj.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><font color="#0077bb">总结</font></h2><p>到这里玩转Solr源码系列就完全结束了，虽然内容不多，但是全是干货(毕竟是笔者一步一个坑爬过来的)。如果你对该系列有补充或者更好的意见可以联系Email:<a href="mailto:fengqingleiyue@163.com" target="_blank" rel="noopener">fengqingleiyue@163.com</a><br>最后来碗鸡汤:&lt;<strong>你能走多远,取决于你填坑能力有多强</strong>&gt;<br><img src="https://s2.ax1x.com/2019/10/03/uwX5Zj.jpg" alt="uwX5Zj.jpg"></p>
 
       
     </div>
@@ -504,6 +502,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/09/text-retrieval-and-search-engines-1/" rel="prev" title="Text Retrieval and Search Engines">
+                Text Retrieval and Search Engines <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -585,7 +587,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -598,7 +600,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -654,7 +656,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#玩转Solr源码之—Solr源码Deploy"><span class="nav-number">1.</span> <span class="nav-text">玩转Solr源码之—Solr源码Deploy</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不到万不得己，别直接改源代码"><span class="nav-number">1.1.</span> <span class="nav-text">不到万不得己，别直接改源代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从源码到Nexus"><span class="nav-number">1.2.</span> <span class="nav-text">从源码到Nexus</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Nexus"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装Nexus</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用ant生成maven-artifacts并上传"><span class="nav-number">1.2.2.</span> <span class="nav-text">使用ant生成maven artifacts并上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#爬坑小技巧"><span class="nav-number">1.2.3.</span> <span class="nav-text">爬坑小技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#玩转Solr源码之–Solr源码Deploy"><span class="nav-number">1.</span> <span class="nav-text">玩转Solr源码之–Solr源码Deploy</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不到万不得己，别直接改源代码"><span class="nav-number">1.1.</span> <span class="nav-text">不到万不得己，别直接改源代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从源码到Nexus"><span class="nav-number">1.2.</span> <span class="nav-text">从源码到Nexus</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Nexus"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装Nexus</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用ant生成maven-artifacts并上传"><span class="nav-number">1.2.2.</span> <span class="nav-text">使用ant生成maven artifacts并上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#爬坑小技巧"><span class="nav-number">1.2.3.</span> <span class="nav-text">爬坑小技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
 
           </div>
