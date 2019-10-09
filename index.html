@@ -397,8 +397,7 @@
 
       
         
-          
-            <h1 id="Text-Retrieval-and-Search-Engines学习笔记-一"><a href="#Text-Retrieval-and-Search-Engines学习笔记-一" class="headerlink" title="Text Retrieval and Search Engines学习笔记(一)"></a><font color="#0077bb">Text Retrieval and Search Engines学习笔记(一)</font></h1><p>这篇文章主要是记录了学习Coursera上的课程<a href="https://www.coursera.org/learn/text-retrieval/home/welcome" target="_blank" rel="noopener">Text Retrieval and Search Engines</a>的一些笔记和个人的理解,这个课程总体来说比较偏理论，虽然实战非常重要，但是有的时候我们也需要学一些理论知识，这样我们才可以慢慢的<strong>知其然，并且知其所以然</strong>。</p>
+          <h1 id="Text-Retrieval-and-Search-Engines学习笔记-一"><a href="#Text-Retrieval-and-Search-Engines学习笔记-一" class="headerlink" title="Text Retrieval and Search Engines学习笔记(一)"></a><font color="#0077bb">Text Retrieval and Search Engines学习笔记(一)</font></h1><p>这篇文章主要是记录了学习Coursera上的课程<a href="https://www.coursera.org/learn/text-retrieval/home/welcome" target="_blank" rel="noopener">Text Retrieval and Search Engines</a>的一些笔记和个人的理解,这个课程总体来说比较偏理论，虽然实战非常重要，但是有的时候我们也需要学一些理论知识，这样我们才可以慢慢的<strong>知其然，并且知其所以然</strong>。</p>
 <h2 id="课程大纲"><a href="#课程大纲" class="headerlink" title="课程大纲"></a><font color="#0077bb">课程大纲</font></h2><blockquote>
 <ul>
 <li>Natural Language Content Analysis</li>
@@ -411,141 +410,17 @@
 <li>Probabilistic Model</li>
 <li>Feedback</li>
 <li>Web Search</li>
-<li>Recommendation<br><img src="https://s2.ax1x.com/2019/10/05/uyjSp9.png" alt="course.png"></li>
-</ul>
-</blockquote>
-<h2 id="Natural-Language-Content-Analysis"><a href="#Natural-Language-Content-Analysis" class="headerlink" title="Natural Language Content Analysis"></a><font color="#0077bb">Natural Language Content Analysis</font></h2><blockquote>
-<ul>
-<li>自然语言处理是啥?<br>百度百科对自然语言的解释是:自然语言处理是计算机科学领域与人工智能领域中的一个重要方向。它研究能实现人与计算机之间用自然语言进行有效通信的各种理论和方法。自然语言处理是一门融语言学、计算机科学、数学于一体的科学。因此，这一领域的研究将涉及自然语言，即人们日常使用的语言，所以它与语言学的研究有着密切的联系，但又有重要的区别。自然语言处理并不是一般地研究自然语言，而在于研制能有效地实现自然语言通信的计算机系统，特别是其中的软件系统。因而它是计算机科学的一部分。<br>说人话就是<strong>用机器处理人类的语言</strong>(这里的语言可以是说的，写的等等))</li>
-<li>NLP 的例子<br>常见的nlp问题有<strong>POS</strong>,<strong>Syntatics Analysis</strong>,<strong>Semantic Analysis</strong> 等等。<br><img src="https://s2.ax1x.com/2019/10/05/uyHGtA.png" alt="nlp_example"></li>
-<li>NLP的现状和难题<br>现在的机器学习和深度学习方法或者crf等算法在分词，机器翻译，情感分析，词性标注等问题上都有很好的表现，但是一般都是在特定领域上的表现比较好，并且这还是基于大量的人工标注或者大量的语料库的情况下，虽然最终的准确率或者各种指标都是97%甚至99%，但是自然语言处理是非常难达到100%的完美的，即使在某个特定的领域，因为有的时候甚至人也很难达到100%，比如3个人做词性标注，同一个输入，标出不同的结果非常常见，在消除歧义等任务上这种情况就更加常见了，另外在深度语义理解上NLP现有的技术也很难达到精准，但这些都不影响我们对NLP技术的学习和研究，随着技术的发展，这些问题在今后或者未来的某天一定会得到更好的解决</li>
-<li>自然语言处理和信息检索的结合<br>了解搜索引擎历史的人都知道，很久以前的搜索引擎原理并不是倒排索引，实际上是根据用户输入的关键词到所有的文章中找的，这也是为什么很多在看老的美国大片到某个系统查询的时候输入的内容带大小写的，但是现在大家在用baidu或者google检索的时候很少有人关注某个单词的大小写(机器翻译有的时候会关注)，是因为现在的搜索引擎都是基于倒排索引的原理，英文有与生俱来的分词界线，但是中文没有(当然英文有其他的问题，例如stemming/lemmatization)，这些分词，词性标注等NLP任务都是信息检索中不可或缺的要素。</li>
-</ul>
-</blockquote>
-<h2 id="Text-Access"><a href="#Text-Access" class="headerlink" title="Text Access"></a><font color="#0077bb">Text Access</font></h2><p>这个章节的内容是比较简单的，主要是讲解了文本信息系统是如何帮助用户获得相关的文本信息的,这里讲一下信息获取的两种模式</p>
-<blockquote>
-<ul>
-<li>pull(拉取)<br>顾名思义，这里用户掌握主动权，可以用户查询或者浏览的方式进行信息的获取</li>
-</ul>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>获取信息的方式</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Querying(查询)</td>
-<td>这个是最常见的模式，比如大家到百度或者google上使用关键词查询</td>
-</tr>
-<tr>
-<td>Browsing(浏览)</td>
-<td>这个也是比较常见的，基本上当你不知道买啥的时候去淘宝上瞎逛就是浏览模式</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<ul>
-<li>push(推送)<br>这种模式下，系统占有主动权，系统可以通过对用户profile或者用户的行为产生一定的“理解”，将用户可能想要的信息推送给用户（类似电商更具购买记录推送类似商品，或者类似用户推荐商品）</li>
-</ul>
-</blockquote>
-<h2 id="Text-Retrieval-Problem"><a href="#Text-Retrieval-Problem" class="headerlink" title="Text Retrieval Problem"></a><font color="#0077bb">Text Retrieval Problem</font></h2><blockquote>
-<ul>
-<li>Text Retrieval 是什么<br>文本检索应该可以说是<strong>Information Retrieval</strong>的一种特殊情况把，说白就是收集现有的文本信息存储到搜索引擎中，根据用户给定的检索语句，搜索引擎返回<strong>相关</strong>的文档给用户。</li>
-<li>Text Retrieval(TR)和数据库检索的有什么区别</li>
-</ul>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>-/-</th>
-<th>文本检索</th>
-<th>数据库检索</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>信息结构</td>
-<td>非结构化，自由结构的文本</td>
-<td>结构化数据</td>
-</tr>
-<tr>
-<td>检索方式</td>
-<td>有歧义的，非完整的</td>
-<td>完整的，带有语义定义的</td>
-</tr>
-<tr>
-<td>返回方式</td>
-<td>有相关性的文档</td>
-<td>完全匹配到的结果</td>
-</tr>
-</tbody>
-</table>
-<p>TR(Text Retrieval) 是经验性的问题，我们很难在数学上证明一个方法比另外一个方法好，并且必须依赖经验性的评估。</p>
-<blockquote>
-<ul>
-<li>Text Retrieval 的定义<br>虽然我们没法使用数学公式给出100%的定义，但是我们依然可以在某种成都上给Text Retrieval下定义。</li>
-</ul>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>术语</th>
-<th>定义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Vocabulary(词汇):</td>
-<td>V={W<sub>1</sub>,W<sub>2</sub>,W<sub>3</sub>,W<sub>4</sub>….W<sub>N</sub>}, 这里W<sub>i</sub> 表示某个词</td>
-</tr>
-<tr>
-<td>Query(查询条件):</td>
-<td>q=q<sub>1</sub>,…,q<sub>m</sub>, q<sub>i</sub> $\in$ V</td>
-</tr>
-<tr>
-<td>Document(文档):</td>
-<td>d<sub>i</sub>=d<sub>i1</sub>,…,d<sub>im<sub>i</sub></sub>, d<sub>ij</sub> $\in$ V</td>
-</tr>
-<tr>
-<td>Collection(集合):</td>
-<td>C={d<sub>i</sub>,…, d<sub>M</sub>}，所有的文档组成了一个集合</td>
-</tr>
-<tr>
-<td>Set of relevant documents(相关文档):</td>
-<td>R(q) $\subseteq$ C，相关文档是所有的文档的一个子集</td>
-</tr>
-<tr>
-<td>Task(任务):</td>
-<td>计算文档相关度R<sup>,</sup>(q),这里的R<sup>,</sup>(q)其实是R(q)的一个近似表示，前面说了我们没法给出100%的数学定义，但是我们可以给出一个近似的定义(可以度量并且有效的定义))</td>
-</tr>
-</tbody>
-</table>
-<h2 id="如何计算R-q"><a href="#如何计算R-q" class="headerlink" title="如何计算R,(q)"></a><font color="#0077bb">如何计算R<sup>,</sup>(q)</font></h2><p>由于Text Retrieval的目标是找到相关的文档，那么如何定义相关，我们则需要通过完成R<sup>,</sup>(q)的计算，这里给出两种可行的方法.(方法有很多，不仅仅局限于这两种))</p>
-<blockquote>
-<ul>
-<li>策略(一)：文档选择方式<br>R<sup>,</sup>(q)={d$\in$C|f(d,q)=1},这里的f(d,q)$\in${0,1}是我们定义的一个方法，这个方法取值要么为0要么为1 （二元分类器），说白了就是要么相关(1),要不不相关(0)</li>
-<li>策略(二)：文档排序<br>R<sup>,</sup>(q)={d$\in$C|f(d,q)&gt;$\theta$}, 这里的f(d,q)$\in$R是一个度量的方法，这里的$\theta$}是一取决于用户的选择，此时系统只需要决定是否某个文档比另外的文档<strong>更相关</strong>（相对相关度）<br>当然通过这两种方式计算R<sup>,</sup>(q)都是有效的，但是那种方法更加切合实际？我们可以通过以下几个点进行分析。<br><img src="https://s2.ax1x.com/2019/10/08/ufarWQ.png" alt="Document_selection_vs_ranking.png"></li>
-<li>二元分类其很有可能不太准确，因为很难区分一个文档到底是相关还是不想关，可能我们设定的条件会约束太强，也有可能约束太弱，那么或多或少的导致会将相关的文档会遗漏或者不相关的文档会被返回给最终用户。</li>
-<li>即使我们在分类的时候将所有的结果都正确的放置在正确的分类上，但是实际上所有的文档的相关性不是都是一样的，不同的文档的相关程度是不尽相同的。所以我们需要设置一定的优先级。</li>
-<li>综上两个观点，我们认为ranking是一个更好的解决方案。</li>
-</ul>
-</blockquote>
-<h2 id="ranking方式的理论论证"><a href="#ranking方式的理论论证" class="headerlink" title="ranking方式的理论论证"></a><font color="#0077bb">ranking方式的理论论证</font></h2><p><a href="https://www.emerald.com/insight/content/doi/10.1108/eb026647/full/html" target="_blank" rel="noopener">The probability ranking principle in IR</a> 原文是:<br>Returning a ranked list of documents in descending order of probability that a document is relevant to the query is the optimal strategy under the following two assumptions:<br>– The utility of a document (to a user) is <strong>independent</strong> of the utility of any other document<br>– A user would browse the results <strong>sequentially</strong><br>简单来说就是:文本检索引擎按照文档和query相关的概率降序排列是一个最优策略，当然这个最有策略基于以下两个前提</p>
-<blockquote>
-<ul>
-<li>某一个文档的作用和其他文档的作用是互不相关的</li>
-<li>用户会按照结果的顺序来浏览结果<br>但是实际上这两个假设并不是100%都是成立的，两个文档可能是相似的，所以肯定不是100%完全独立的，而且用户可能会跳着看一些结果，但是，即使这些假设都不是100%成立的，按照文档和query相关的概率对结果进行排序在大部分的场景下仍然是一种合理的做法。</li>
-</ul>
-</blockquote>
-<p>至此，我们可以得出-&gt; 对文档进行排序相比对文档进行二元分类似乎是一种更加有效的解决文本检索问题的方法，前面我们也提到过，解决文档和query相关的关键在于如何计算R<sup>,</sup>(q),其实就是如何定义一个有效的f(q,d)方法。这个我会在后面的章节继续探讨。</p>
-
-          
+<li>Recommendation
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/10/09/text-retrieval-and-search-engines-1/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
-    </div>
+    </li></ul></blockquote></div>
     
     
     
