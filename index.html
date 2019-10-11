@@ -7,7 +7,7 @@
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
 <head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
@@ -138,7 +138,7 @@
 
 
 
-  <title>态度决定高度,细节决定成败</title>
+  <title>态度决定高度,细节决定成败</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -157,7 +157,7 @@
     
   
 
-  <div class="container sidebar-position-left 
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
   page-home">
     <div class="headband"></div>
 
@@ -286,6 +286,179 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.fengqinglei.top/2019/10/09/text-retrieval-and-search-engines-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FQL">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="态度决定高度,细节决定成败">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/09/text-retrieval-and-search-engines-2/" itemprop="url">Text Retrieval and Search Engines 2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-09T20:23:02+08:00">
+                2019-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/09/text-retrieval-and-search-engines-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/10/09/text-retrieval-and-search-engines-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Text-Retrieval-and-Search-Engines学习笔记-二"><a href="#Text-Retrieval-and-Search-Engines学习笔记-二" class="headerlink" title="Text Retrieval and Search Engines学习笔记(二)"></a><font color="#0077bb">Text Retrieval and Search Engines学习笔记(二)</font></h1><p>这篇文章是继上一篇<strong>Text Retrieval and Search Engines学习笔记(一)</strong> 的后续部分，这一篇我们重点介绍如何定义和计算<strong>f(q,d)</strong></p>
+<h2 id="Text-Retrieval-Methods"><a href="#Text-Retrieval-Methods" class="headerlink" title="Text Retrieval Methods"></a><font color="#0077bb">Text Retrieval Methods</font></h2><p>首先，我们得知道如何设计一个排序方法，这里我们可以列举一个好的排序方法都有那些特征或者属性</p>
+<blockquote>
+<ul>
+<li>关于Query :q=q<sub>1</sub>,…,q<sub>m</sub>, q<sub>i</sub> $\in$ V</li>
+<li>关于Document: d<sub>i</sub>=d<sub>i1</sub>,…,d<sub>ij</sub>, d<sub>ij</sub> $\in$ V</li>
+<li>排序方法： f(q,d)$\in$R (这里表示排序方法的值在实数域，说人话就是可以取任意实数)</li>
+<li>一个好的排序方法必须将相关的文档排在不相关的文档之前,那么问题来了，我们如何衡量query和document的相关的似然度呢？ </li>
+<li>我们必须给排序模型/方法下一个明确的定义，并且这个定义还是可以明确计算的(说白了就是能够以数学公式的方式定义出来，我们可以通过数学公式计算出相关度)
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/10/09/text-retrieval-and-search-engines-2/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </li></ul></blockquote></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://www.fengqinglei.top/2019/10/09/text-retrieval-and-search-engines-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -305,7 +478,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/10/09/text-retrieval-and-search-engines-1/" itemprop="url">Text Retrieval and Search Engines</a></h1>
+                <a class="post-title-link" href="/2019/10/09/text-retrieval-and-search-engines-1/" itemprop="url">Text Retrieval and Search Engines 1</a></h1>
         
 
         <div class="post-meta">
@@ -1333,7 +1506,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1631,6 +1804,28 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
 
   
 
