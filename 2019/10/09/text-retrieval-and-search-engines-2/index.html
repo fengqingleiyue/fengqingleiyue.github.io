@@ -103,7 +103,7 @@
 <meta property="og:image" content="https://s2.ax1x.com/2019/10/09/uIbWNR.png">
 <meta property="og:image" content="https://s2.ax1x.com/2019/10/09/uIv19s.png">
 <meta property="og:image" content="https://s2.ax1x.com/2019/10/11/uHTHUJ.png">
-<meta property="og:updated_time" content="2019-10-11T13:09:34.941Z">
+<meta property="og:updated_time" content="2019-10-11T13:35:48.208Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Text Retrieval and Search Engines 2">
 <meta name="twitter:description" content="Text Retrieval and Search Engines学习笔记(二)这篇文章是继上一篇Text Retrieval and Search Engines学习笔记(一) 的后续部分，这一篇我们重点介绍如何定义和计算f(q,d) Text Retrieval Methods首先，我们得知道如何设计一个排序方法，这里我们可以列举一个好的排序方法都有那些特征或者属性   关于Query :q=">
@@ -366,7 +366,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.6k 字
+                  1.7k 字
                 </span>
               
 
@@ -534,7 +534,7 @@
 </tbody>
 </table>
 </div>
-<p>最终的按照score排序的结果为 (d4,d3,d2) (d1,d5) [因为d4,d3,d2 分数一样，所以部分前后， d1,d5同样如此]],貌似<strong>Simplest Vector Model</strong> 反映了一些文档和query的相关程度，但是效果没有那么的达到预期。</p>
+<p>最终的按照score排序的结果为 (d4,d3,d2) (d1,d5) [因为d4,d3,d2 分数一样，所以部分前后， d1,d5同样如此]],貌似<strong>Simplest Vector Model</strong> 反映了一些文档和query的相关程度，但是效果没有那么的达到预期。<br>如果我们仔细会想<strong>Bit Vector</strong> 就会发现，很多信息在生成query/文档向量的时候已经被丢掉了(例如词频)，那么如果我们加上这些信息<strong>Simplest Vector Model</strong> 是不是会好很多呢? 我们将下一篇详细介绍<strong>Vector Space Model</strong></p>
 
       
     </div>
