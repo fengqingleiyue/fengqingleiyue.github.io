@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="PFZ6yqxOFdQdNik1n9IHV58-4M7-BgXxFul8LRPCBfE">
+<meta name="google-site-verification" content="oOLLlne5ID1zvCYfOmEmCraUcgVCME27VIB4MuKyXYQ">
+<meta name="baidu-site-verification" content="rFgOzSpXHJ">
+<meta name="msvalidate.01" content="3E8745DAA3A417E7E862430B63AF90E6">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="elasticearch,docker,volume permission,docker volume 权限,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="态度决定高度,细节决定成败" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Elasticsearch之docker安装最近由于工作原因，需要倒腾下Elasticsearch ,虽然本人的工作中，大部分情况下使用的都是Solr,但是这并不能挡住我学习Elasticsearch的激情，这里我并不做这两个工具的好坏，只要用的顺手用的舒服就是好工具。这里我以docker安装为例子。 环境准备笔者使用的环境为华为云上的一台虚拟机,这里简单的描述下docker和docker-com">
+<meta name="keywords" content="elasticearch,docker,volume permission,docker volume 权限">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch docker volume permission issue">
+<meta property="og:url" content="https://www.fengqinglei.top/2019/10/27/elasticsearch-docker-install/index.html">
+<meta property="og:site_name" content="态度决定高度,细节决定成败">
+<meta property="og:description" content="Elasticsearch之docker安装最近由于工作原因，需要倒腾下Elasticsearch ,虽然本人的工作中，大部分情况下使用的都是Solr,但是这并不能挡住我学习Elasticsearch的激情，这里我并不做这两个工具的好坏，只要用的顺手用的舒服就是好工具。这里我以docker安装为例子。 环境准备笔者使用的环境为华为云上的一台虚拟机,这里简单的描述下docker和docker-com">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-27T13:38:55.450Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Elasticsearch docker volume permission issue">
+<meta name="twitter:description" content="Elasticsearch之docker安装最近由于工作原因，需要倒腾下Elasticsearch ,虽然本人的工作中，大部分情况下使用的都是Solr,但是这并不能挡住我学习Elasticsearch的激情，这里我并不做这两个工具的好坏，只要用的顺手用的舒服就是好工具。这里我以docker安装为例子。 环境准备笔者使用的环境为华为云上的一台虚拟机,这里简单的描述下docker和docker-com">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.fengqinglei.top/2019/10/27/elasticsearch-docker-install/">
+
+
+
+
+
+  <title>Elasticsearch docker volume permission issue | 态度决定高度,细节决定成败</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">态度决定高度,细节决定成败</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">疯狂的码农</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.fengqinglei.top/2019/10/27/elasticsearch-docker-install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FQL">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="态度决定高度,细节决定成败">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Elasticsearch docker volume permission issue</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-27T00:23:37+08:00">
+                2019-10-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/27/elasticsearch-docker-install/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/10/27/elasticsearch-docker-install/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o">阅读数</i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Elasticsearch之docker安装"><a href="#Elasticsearch之docker安装" class="headerlink" title="Elasticsearch之docker安装"></a><font color="#0077bb">Elasticsearch之docker安装</font></h1><p>最近由于工作原因，需要倒腾下<strong>Elasticsearch</strong> ,虽然本人的工作中，大部分情况下使用的都是<strong>Solr</strong>,但是这并不能挡住我学习Elasticsearch的激情，这里我并不做这两个工具的好坏，只要用的顺手用的舒服就是好工具。这里我以docker安装为例子。</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a><font color="#0077bb">环境准备</font></h2><p>笔者使用的环境为<strong>华为云</strong>上的一台虚拟机,这里简单的描述下<strong>docker</strong>和<strong>docker-compose</strong>的安装<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y install docker docker-compose </span><br><span class="line"><span class="comment">#具体的版本为: docker-compose-1.18.0-4.el7.noarch , docker-1.13.1-103.git7f2769b.el7.centos.x86_64</span></span><br></pre></td></tr></table></figure></p>
+<p>docker 安装elasticsearch 还是比较简单的,我们直接参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html就行了" target="_blank" rel="noopener">官方文档</a>，这里我们使用的版本号码是<strong>7.4.1</strong>。大部分情况下，如果你是为了体验elasticsearch，或者搭建一个简单的测试环境，那么elasticsearch的官方文档应该就能解决这个问题,但是由于笔者需要存储大概几十万的数据进去，而且由于使用的是云上的环境，一般来说系统盘的小大都很小（常见的值为8GB），所以必须将elasticsearch的data目录挂载到数据盘上。而问题就出现在docker的目录映射上。<br><a id="more"></a></p>
+<h2 id="AccessDeniedException"><a href="#AccessDeniedException" class="headerlink" title="AccessDeniedException"></a><font color="#0077bb">AccessDeniedException</font></h2><p>上面提过，笔者大部分情况下使用的是Solr,也自定了Solr的docker，在Solr中(目前使用的版本是6.5.1),如果需要将索引数据挂载出来，只要在docker-compose文件中直接做volume映射就行了，例如<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">   volumes:</span><br><span class="line">    - system_data_path:inside_docker_solr_index_data_path</span><br><span class="line">..</span><br></pre></td></tr></table></figure></p>
+<p>同样的道理，我直接修改了docker-compose文件，将instance上的另外一块磁盘上的某个目录映射到docker中的/usr/share/elasticsearch/data/,这里直接上笔者的docker-compose文件<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## docker-compose.yml</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">'3'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr"> elasticsearch:</span></span><br><span class="line"><span class="attr">   image:</span> <span class="string">'docker.elastic.co/elasticsearch/elasticsearch:7.4.1'</span></span><br><span class="line"><span class="attr">   ports:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="number">6200</span><span class="string">:9200</span></span><br><span class="line"><span class="bullet">    -</span> <span class="number">6300</span><span class="string">:9300</span></span><br><span class="line"><span class="attr">   env_file:</span> <span class="string">elasticsearch_env</span></span><br><span class="line"><span class="attr">   ulimits:</span></span><br><span class="line"><span class="attr">     memlock:</span></span><br><span class="line"><span class="attr">       soft:</span> <span class="bullet">-1</span></span><br><span class="line"><span class="attr">       hard:</span> <span class="bullet">-1</span></span><br><span class="line"><span class="attr">     nofile:</span></span><br><span class="line"><span class="attr">       soft:</span> <span class="number">65535</span></span><br><span class="line"><span class="attr">       hard:</span> <span class="number">65535</span></span><br><span class="line"><span class="attr">   volumes:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">./tmp:/usr/share/elasticsearch/data/</span></span><br><span class="line"><span class="attr">   privileged:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment">## elasticsearch_env </span></span><br><span class="line"><span class="string">discovery.type=single-node</span></span><br><span class="line"><span class="string">cluster.name=test</span></span><br><span class="line"><span class="string">node.name=node-01</span></span><br><span class="line"><span class="string">bootstrap.memory_lock=true</span></span><br></pre></td></tr></table></figure></p>
+<p>但是当我直接<strong>docker-compose up -d</strong>之后，缺发现container无法启动，查下了日志具体的错误为<strong>org.elasticsearch.bootstrap.StartupException: ElasticsearchException[failed to bind service]; nested: AccessDeniedException</strong>,貌似是没有权限???<br>完整的错误为:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">OpenJDK <span class="number">64</span>-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version <span class="number">9.0</span> and will likely be removed in a future release.</span><br><span class="line">&#123;<span class="string">"type"</span>: <span class="string">"server"</span>, <span class="string">"timestamp"</span>: <span class="string">"2019-10-27T03:27:37,816Z"</span>, <span class="string">"level"</span>: <span class="string">"WARN"</span>, <span class="string">"component"</span>: <span class="string">"o.e.b.ElasticsearchUncaughtExceptionHandler"</span>, <span class="string">"cluster.name"</span>: <span class="string">"test"</span>, <span class="string">"node.name"</span>: <span class="string">"node-01"</span>, <span class="string">"message"</span>: <span class="string">"uncaught exception in thread [main]"</span>,</span><br><span class="line"><span class="string">"stacktrace"</span>: [<span class="string">"org.elasticsearch.bootstrap.StartupException: ElasticsearchException[failed to bind service]; nested: AccessDeniedException[/usr/share/elasticsearch/data/nodes];"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Elasticsearch.init(Elasticsearch.java:163) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Elasticsearch.execute(Elasticsearch.java:150) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.cli.EnvironmentAwareCommand.execute(EnvironmentAwareCommand.java:86) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.cli.Command.mainWithoutErrorHandling(Command.java:125) ~[elasticsearch-cli-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.cli.Command.main(Command.java:90) ~[elasticsearch-cli-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Elasticsearch.main(Elasticsearch.java:115) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Elasticsearch.main(Elasticsearch.java:92) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"Caused by: org.elasticsearch.ElasticsearchException: failed to bind service"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.node.Node.&lt;init&gt;(Node.java:614) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.node.Node.&lt;init&gt;(Node.java:255) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Bootstrap$5.&lt;init&gt;(Bootstrap.java:221) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Bootstrap.setup(Bootstrap.java:221) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Bootstrap.init(Bootstrap.java:349) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Elasticsearch.init(Elasticsearch.java:159) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"... 6 more"</span>,</span><br><span class="line"><span class="string">"Caused by: java.nio.file.AccessDeniedException: /usr/share/elasticsearch/data/nodes"</span>,</span><br><span class="line"><span class="string">"at sun.nio.fs.UnixException.translateToIOException(UnixException.java:90) ~[?:?]"</span>,</span><br><span class="line"><span class="string">"at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?]"</span>,</span><br><span class="line"><span class="string">"at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:116) ~[?:?]"</span>,</span><br><span class="line"><span class="string">"at sun.nio.fs.UnixFileSystemProvider.createDirectory(UnixFileSystemProvider.java:389) ~[?:?]"</span>,</span><br><span class="line"><span class="string">"at java.nio.file.Files.createDirectory(Files.java:693) ~[?:?]"</span>,</span><br><span class="line"><span class="string">"at java.nio.file.Files.createAndCheckIsDirectory(Files.java:800) ~[?:?]"</span>,</span><br><span class="line"><span class="string">"at java.nio.file.Files.createDirectories(Files.java:786) ~[?:?]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.env.NodeEnvironment.lambda$new$0(NodeEnvironment.java:272) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.env.NodeEnvironment$NodeLock.&lt;init&gt;(NodeEnvironment.java:209) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.env.NodeEnvironment.&lt;init&gt;(NodeEnvironment.java:269) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.node.Node.&lt;init&gt;(Node.java:275) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.node.Node.&lt;init&gt;(Node.java:255) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Bootstrap$5.&lt;init&gt;(Bootstrap.java:221) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Bootstrap.setup(Bootstrap.java:221) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Bootstrap.init(Bootstrap.java:349) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"at org.elasticsearch.bootstrap.Elasticsearch.init(Elasticsearch.java:159) ~[elasticsearch-7.4.1.jar:7.4.1]"</span>,</span><br><span class="line"><span class="string">"... 6 more"</span>] &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里想到之前在没有使用docker安装elasticsearch的时候elasticsearch默认是不使用root用户进行启动的，这应该就是root cause,一顿google之后发现解决方案大致有两种</p>
+<blockquote>
+<ul>
+<li>将elasticsearch用户加入到root组<br>因为需要重新打docker，比较蛋疼，这里直接放上解决方案的链接<a href="https://github.com/elastic/elasticsearch-docker/issues/49" target="_blank" rel="noopener">https://github.com/elastic/elasticsearch-docker/issues/49</a></li>
+<li>使用docker volume来解决权限的问题<br>在官方的给出的docker-compose中有个 <strong>driver: local</strong>,使用这个确实elasticsearch就可以启动了，是应为这里的<strong>local</strong>是指docker安装的磁盘，如果docker安装所有的磁盘空间足够大，那么确实没啥问题，但是一般来说各种云的虚拟主机的系统盘默认也就8GB,确实不太够用。这里也是经过一番google之后直接找到了解决方案(直接上docker-compose的内容)<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'3'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr"> elasticsearch:</span></span><br><span class="line"><span class="attr">   image:</span> <span class="string">'docker.elastic.co/elasticsearch/elasticsearch:7.4.1'</span></span><br><span class="line"><span class="attr">   ports:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="number">9200</span><span class="string">:9200</span></span><br><span class="line"><span class="bullet">    -</span> <span class="number">9300</span><span class="string">:9300</span></span><br><span class="line"><span class="attr">   env_file:</span> <span class="string">elasticsearch_env</span></span><br><span class="line"><span class="attr">   ulimits:</span></span><br><span class="line"><span class="attr">     memlock:</span></span><br><span class="line"><span class="attr">       soft:</span> <span class="bullet">-1</span></span><br><span class="line"><span class="attr">       hard:</span> <span class="bullet">-1</span></span><br><span class="line"><span class="attr">     nofile:</span></span><br><span class="line"><span class="attr">       soft:</span> <span class="number">65535</span></span><br><span class="line"><span class="attr">       hard:</span> <span class="number">65535</span></span><br><span class="line"><span class="attr">   volumes:</span></span><br><span class="line"><span class="attr">    - esdata:</span><span class="string">/usr/share/elasticsearch/data/</span></span><br><span class="line"><span class="attr">    - eslog:</span><span class="string">/usr/share/elasticsearch/logs/</span></span><br><span class="line"><span class="attr">   privileged:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line"><span class="attr">  esdata:</span></span><br><span class="line"><span class="attr">    driver:</span> <span class="string">local</span></span><br><span class="line"><span class="attr">    driver_opts:</span></span><br><span class="line"><span class="attr">      device:</span> <span class="string">/data/elastic_search/index_data/</span> <span class="comment"># 挂载日志目录到/data下(/data是数据盘)</span></span><br><span class="line"><span class="attr">      o:</span> <span class="string">bind</span></span><br><span class="line"><span class="attr">  eslog:</span></span><br><span class="line"><span class="attr">    driver:</span> <span class="string">local</span></span><br><span class="line"><span class="attr">    driver_opts:</span></span><br><span class="line"><span class="attr">      device:</span> <span class="string">/data/elastic_search/logs/</span>  <span class="comment"># 挂载日志目录到/data下(/data是数据盘)</span></span><br><span class="line"><span class="attr">      o:</span> <span class="string">bind</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<p>修改完之后就启动成功了。如果想看docker中有哪些volume可以通过<strong>docker volume list</strong>来查看<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker volume list</span></span><br><span class="line">DRIVER              VOLUME NAME</span><br><span class="line"><span class="built_in">local</span>               elasticsearch_esdata</span><br><span class="line"><span class="built_in">local</span>               elasticsearch_eslog</span><br></pre></td></tr></table></figure></p>
+<h1 id="关于docker的小技巧"><a href="#关于docker的小技巧" class="headerlink" title="关于docker的小技巧"></a><font color="#0077bb">关于docker的小技巧</font></h1><ul>
+<li>如何加快国内docker pull的速度</li>
+</ul>
+<p>由于<strong>docker hub</strong>的服务器在海外，所以直接从docker hub上拉取一些docker大家会发现巨慢无比，往往拉取一些镜像需要等好久，这里给大家推荐<a href="https://www.daocloud.io/mirror" target="_blank" rel="noopener">Daocloud</a>,配置起来也非常简单:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io</span><br></pre></td></tr></table></figure></p>
+<p>如果执行失败的话直接修改/etc/docker/daemon.json，加入<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"registry-mirrors"</span>: [<span class="string">"http://f1361db2.m.daocloud.io"</span>]&#125;</span><br></pre></td></tr></table></figure></p>
+<p>重启docker服务之后再拉取即可，笔者尝试了之后，发现速度确实比之前快很多</p>
+<ul>
+<li>如何使用非root用户玩转docker</li>
+</ul>
+<p>很多时候我们在服务器或者个人的开发电脑上，都不是root用户（个人的测试机器除外），而且有的时候公司的运维由于安全问题也不愿意给开发root权限，那么是不是玩转docker一定要root权限呢？答案是不用,具体的原理也很简单，就是把某个非root用户加入到docker对应的用户组中，这里以centos 7 为例子:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 例如当前的xxx user用户没有指定docker命令的权限</span></span><br><span class="line">[xxx user]$ docker ps -a</span><br><span class="line">Got permission denied <span class="keyword">while</span> trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/v1.26/containers/json?all=1: dial unix /var/run/docker.sock: connect: permission denied</span><br></pre></td></tr></table></figure></p>
+<p>1)在root在执行下列命令，将当前用户加入到docker对应的用户组中<br>(可以通过cat /etc/group | grep docker命令查看具体的docker对应的用户组)<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -aG dockerroot &lt;user_name&gt;</span><br></pre></td></tr></table></figure></p>
+<p>2)添加dockerroot用户组信息到/etc/docker/daemon.json中（root在执行）<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   <span class="attr">"group"</span>: <span class="string">"dockerroot"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3)重启docker服务(在root下执行)<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root<span class="comment">#service docker restart </span></span><br><span class="line">Redirecting to /bin/systemctl restart docker.service</span><br></pre></td></tr></table></figure></p>
+<p>4) 在<user_ame>下重新执行docker命令后，就会发现非root用户也可以执行docker了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;user_name&gt;$ docker ps -a</span><br><span class="line">CONTAINER ID        IMAGE                                                                                      COMMAND                  CREATED             STATUS                        PORTS                     NAMES</span><br><span class="line">595d4fc7057b        local-dtr.zhihuiya.com/base/ant-maven:latest                                               &quot;bash&quot;                   4 weeks ago         Exited (0)</span><br></pre></td></tr></table></figure></user_ame></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a><font color="#0077bb">参考文章</font></h2><p><a href="http://www.softpanorama.org/VM/Docker/Installation/rhel7_docker_package_dockerroot_problem.shtml" target="_blank" rel="noopener">http://www.softpanorama.org/VM/Docker/Installation/rhel7_docker_package_dockerroot_problem.shtml</a><br><a href="https://ywnz.com/linuxjc/4487.html" target="_blank" rel="noopener">https://ywnz.com/linuxjc/4487.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elasticearch/" rel="tag"># elasticearch</a>
+          
+            <a href="/tags/docker/" rel="tag"># docker</a>
+          
+            <a href="/tags/volume-permission/" rel="tag"># volume permission</a>
+          
+            <a href="/tags/docker-volume-权限/" rel="tag"># docker volume 权限</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/17/text-retrieval-and-search-engines-3/" rel="next" title="Text Retrieval and Search Engines 3">
+                <i class="fa fa-chevron-left"></i> Text Retrieval and Search Engines 3
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="FQL">
+            
+              <p class="site-author-name" itemprop="name">FQL</p>
+              <p class="site-description motion-element" itemprop="description">一个专注为什么的博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fengqingleiyue" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:fengqingleiyue@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Elasticsearch之docker安装"><span class="nav-number">1.</span> <span class="nav-text">Elasticsearch之docker安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境准备"><span class="nav-number">1.1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AccessDeniedException"><span class="nav-number">1.2.</span> <span class="nav-text">AccessDeniedException</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于docker的小技巧"><span class="nav-number">2.</span> <span class="nav-text">关于docker的小技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">2.1.</span> <span class="nav-text">参考文章</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FQL</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user">访客数</i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye">总访问量</i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: '6yXMwb5kTOh8sbk3lEsbXRaK-gzGzoHsz',
+        appKey: '5D7N6FwrI3BWypsetbgVVOX7',
+        placeholder: '来吧,造作吧!!!',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
