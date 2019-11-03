@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.fengqinglei.top/2019/10/27/elasticsearch-docker-install/</loc>
+    <loc>https://www.fengqinglei.top/2019/10/28/text-retrieval-and-search-engines-4/</loc>
     
-    <lastmod>2019-10-27T13:38:55.450Z</lastmod>
+    <lastmod>2019-11-03T14:23:41.831Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://www.fengqinglei.top/2019/10/17/text-retrieval-and-search-engines-3/</loc>
     
-    <lastmod>2019-10-27T08:55:11.065Z</lastmod>
+    <lastmod>2019-11-03T14:04:35.891Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.fengqinglei.top/2019/10/27/elasticsearch-docker-install/</loc>
+    
+    <lastmod>2019-10-27T13:38:55.450Z</lastmod>
     
   </url>
   

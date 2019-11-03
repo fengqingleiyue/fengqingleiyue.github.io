@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.fengqinglei.top/2019/10/27/elasticsearch-docker-install/</loc>
-    <lastmod>2019-10-27</lastmod>
+    <loc>https://www.fengqinglei.top/2019/10/28/text-retrieval-and-search-engines-4/</loc>
+    <lastmod>2019-11-03</lastmod>
   </url>  <url>
     <loc>https://www.fengqinglei.top/2019/10/17/text-retrieval-and-search-engines-3/</loc>
+    <lastmod>2019-11-03</lastmod>
+  </url>  <url>
+    <loc>https://www.fengqinglei.top/2019/10/27/elasticsearch-docker-install/</loc>
     <lastmod>2019-10-27</lastmod>
   </url>  <url>
     <loc>https://www.fengqinglei.top/2019/10/09/text-retrieval-and-search-engines-2/</loc>

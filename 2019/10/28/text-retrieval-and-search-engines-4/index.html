@@ -79,7 +79,7 @@
 
 
 
-  <meta name="keywords" content="NLP,Text Retrieval,Vector Space Model,Search Engine,Probabilistic Model,">
+  <meta name="keywords" content="NLP,Text Retrieval,Vector Space Model,Search Engine,Invert Index,Compression,postings list,">
 
 
 
@@ -92,22 +92,22 @@
 
 
 
-<meta name="description" content="Text Retrieval and Search Engines学习笔记(一)这篇文章主要是记录了学习Coursera上的课程Text Retrieval and Search Engines的一些笔记和个人的理解,这个课程总体来说比较偏理论，虽然实战非常重要，但是有的时候我们也需要学一些理论知识，这样我们才可以慢慢的知其然，并且知其所以然。 课程大纲  Natural Language Con">
-<meta name="keywords" content="NLP,Text Retrieval,Vector Space Model,Search Engine,Probabilistic Model">
+<meta name="description" content="Text Retrieval and Search Engines学习笔记(四)这篇文章是接着上一篇Text Retrieval and Search Engines学习笔记(三) ，这一篇我们介如何绍下实现Vector Space Model所需要的一些步骤和流程。 System Implementation前面我们介绍了Vector Space Model的一种实现-&amp;gt; BM25,虽然我">
+<meta name="keywords" content="NLP,Text Retrieval,Vector Space Model,Search Engine,Invert Index,Compression,postings list">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Text Retrieval and Search Engines 1">
-<meta property="og:url" content="https://www.fengqinglei.top/2019/10/09/text-retrieval-and-search-engines-1/index.html">
+<meta property="og:title" content="Text Retrieval and Search Engines 4">
+<meta property="og:url" content="https://www.fengqinglei.top/2019/10/28/text-retrieval-and-search-engines-4/index.html">
 <meta property="og:site_name" content="态度决定高度,细节决定成败">
-<meta property="og:description" content="Text Retrieval and Search Engines学习笔记(一)这篇文章主要是记录了学习Coursera上的课程Text Retrieval and Search Engines的一些笔记和个人的理解,这个课程总体来说比较偏理论，虽然实战非常重要，但是有的时候我们也需要学一些理论知识，这样我们才可以慢慢的知其然，并且知其所以然。 课程大纲  Natural Language Con">
+<meta property="og:description" content="Text Retrieval and Search Engines学习笔记(四)这篇文章是接着上一篇Text Retrieval and Search Engines学习笔记(三) ，这一篇我们介如何绍下实现Vector Space Model所需要的一些步骤和流程。 System Implementation前面我们介绍了Vector Space Model的一种实现-&amp;gt; BM25,虽然我">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://s2.ax1x.com/2019/10/05/uyjSp9.png">
-<meta property="og:image" content="https://s2.ax1x.com/2019/10/05/uyHGtA.png">
-<meta property="og:image" content="https://s2.ax1x.com/2019/10/08/ufarWQ.png">
-<meta property="og:updated_time" content="2019-10-11T13:11:06.663Z">
+<meta property="og:image" content="https://s2.ax1x.com/2019/10/28/KgB2z6.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/10/28/KgRQsI.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/11/03/Kj18MQ.md.png">
+<meta property="og:updated_time" content="2019-11-03T14:23:41.831Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Text Retrieval and Search Engines 1">
-<meta name="twitter:description" content="Text Retrieval and Search Engines学习笔记(一)这篇文章主要是记录了学习Coursera上的课程Text Retrieval and Search Engines的一些笔记和个人的理解,这个课程总体来说比较偏理论，虽然实战非常重要，但是有的时候我们也需要学一些理论知识，这样我们才可以慢慢的知其然，并且知其所以然。 课程大纲  Natural Language Con">
-<meta name="twitter:image" content="https://s2.ax1x.com/2019/10/05/uyjSp9.png">
+<meta name="twitter:title" content="Text Retrieval and Search Engines 4">
+<meta name="twitter:description" content="Text Retrieval and Search Engines学习笔记(四)这篇文章是接着上一篇Text Retrieval and Search Engines学习笔记(三) ，这一篇我们介如何绍下实现Vector Space Model所需要的一些步骤和流程。 System Implementation前面我们介绍了Vector Space Model的一种实现-&amp;gt; BM25,虽然我">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/10/28/KgB2z6.md.png">
 
 
 
@@ -137,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="https://www.fengqinglei.top/2019/10/09/text-retrieval-and-search-engines-1/">
+  <link rel="canonical" href="https://www.fengqinglei.top/2019/10/28/text-retrieval-and-search-engines-4/">
 
 
 
 
 
-  <title>Text Retrieval and Search Engines 1 | 态度决定高度,细节决定成败</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>Text Retrieval and Search Engines 4 | 态度决定高度,细节决定成败</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -290,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.fengqinglei.top/2019/10/09/text-retrieval-and-search-engines-1/">
+    <link itemprop="mainEntityOfPage" href="https://www.fengqinglei.top/2019/10/28/text-retrieval-and-search-engines-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="FQL">
@@ -307,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Text Retrieval and Search Engines 1</h1>
+          <h1 class="post-title" itemprop="name headline">Text Retrieval and Search Engines 4</h1>
         
 
         <div class="post-meta">
@@ -319,8 +319,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-09T19:58:38+08:00">
-                2019-10-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-28T21:46:03+08:00">
+                2019-10-28
               </time>
             
 
@@ -338,8 +338,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/10/09/text-retrieval-and-search-engines-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/10/09/text-retrieval-and-search-engines-1/" itemprop="commentCount"></span>
+                <a href="/2019/10/28/text-retrieval-and-search-engines-4/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/10/28/text-retrieval-and-search-engines-4/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,7 +366,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.4k 字
+                  2.3k 字
                 </span>
               
 
@@ -403,142 +403,77 @@
       
 
       
-        <h1 id="Text-Retrieval-and-Search-Engines学习笔记-一"><a href="#Text-Retrieval-and-Search-Engines学习笔记-一" class="headerlink" title="Text Retrieval and Search Engines学习笔记(一)"></a><font color="#0077bb">Text Retrieval and Search Engines学习笔记(一)</font></h1><p>这篇文章主要是记录了学习Coursera上的课程<a href="https://www.coursera.org/learn/text-retrieval/home/welcome" target="_blank" rel="noopener">Text Retrieval and Search Engines</a>的一些笔记和个人的理解,这个课程总体来说比较偏理论，虽然实战非常重要，但是有的时候我们也需要学一些理论知识，这样我们才可以慢慢的<strong>知其然，并且知其所以然</strong>。</p>
-<h2 id="课程大纲"><a href="#课程大纲" class="headerlink" title="课程大纲"></a><font color="#0077bb">课程大纲</font></h2><blockquote>
-<ul>
-<li>Natural Language Content Analysis</li>
-<li>Text Access</li>
-<li>Text Retrieval Problem</li>
-<li>Text Retrieval Methods</li>
-<li>Vector Space Model</li>
-<li>System Implementation</li>
-<li>Evaluation</li>
-<li>Probabilistic Model</li>
-<li>Feedback</li>
-<li>Web Search</li>
-<li>Recommendation<a id="more"></a>
-<img src="https://s2.ax1x.com/2019/10/05/uyjSp9.png" alt="course.png"><h2 id="Natural-Language-Content-Analysis"><a href="#Natural-Language-Content-Analysis" class="headerlink" title="Natural Language Content Analysis"></a><font color="#0077bb">Natural Language Content Analysis</font></h2></li>
-<li>自然语言处理是啥?<br>百度百科对自然语言的解释是:自然语言处理是计算机科学领域与人工智能领域中的一个重要方向。它研究能实现人与计算机之间用自然语言进行有效通信的各种理论和方法。自然语言处理是一门融语言学、计算机科学、数学于一体的科学。因此，这一领域的研究将涉及自然语言，即人们日常使用的语言，所以它与语言学的研究有着密切的联系，但又有重要的区别。自然语言处理并不是一般地研究自然语言，而在于研制能有效地实现自然语言通信的计算机系统，特别是其中的软件系统。因而它是计算机科学的一部分。<br>说人话就是<strong>用机器处理人类的语言</strong>(这里的语言可以是说的，写的等等))</li>
-<li>NLP 的例子<br>常见的nlp问题有<strong>POS</strong>,<strong>Syntatics Analysis</strong>,<strong>Semantic Analysis</strong> 等等。<br><img src="https://s2.ax1x.com/2019/10/05/uyHGtA.png" alt="nlp_example"></li>
-<li>NLP的现状和难题<br>现在的机器学习和深度学习方法或者crf等算法在分词，机器翻译，情感分析，词性标注等问题上都有很好的表现，但是一般都是在特定领域上的表现比较好，并且这还是基于大量的人工标注或者大量的语料库的情况下，虽然最终的准确率或者各种指标都是97%甚至99%，但是自然语言处理是非常难达到100%的完美的，即使在某个特定的领域，因为有的时候甚至人也很难达到100%，比如3个人做词性标注，同一个输入，标出不同的结果非常常见，在消除歧义等任务上这种情况就更加常见了，另外在深度语义理解上NLP现有的技术也很难达到精准，但这些都不影响我们对NLP技术的学习和研究，随着技术的发展，这些问题在今后或者未来的某天一定会得到更好的解决</li>
-<li>自然语言处理和信息检索的结合<br>了解搜索引擎历史的人都知道，很久以前的搜索引擎原理并不是倒排索引，实际上是根据用户输入的关键词到所有的文章中找的，这也是为什么很多在看老的美国大片到某个系统查询的时候输入的内容带大小写的，但是现在大家在用baidu或者google检索的时候很少有人关注某个单词的大小写(机器翻译有的时候会关注)，是因为现在的搜索引擎都是基于倒排索引的原理，英文有与生俱来的分词界线，但是中文没有(当然英文有其他的问题，例如stemming/lemmatization)，这些分词，词性标注等NLP任务都是信息检索中不可或缺的要素。<h2 id="Text-Access"><a href="#Text-Access" class="headerlink" title="Text Access"></a><font color="#0077bb">Text Access</font></h2>这个章节的内容是比较简单的，主要是讲解了文本信息系统是如何帮助用户获得相关的文本信息的,这里讲一下信息获取的两种模式</li>
-<li>pull(拉取)<br>顾名思义，这里用户掌握主动权，可以用户查询或者浏览的方式进行信息的获取</li>
+        <h1 id="Text-Retrieval-and-Search-Engines学习笔记-四"><a href="#Text-Retrieval-and-Search-Engines学习笔记-四" class="headerlink" title="Text Retrieval and Search Engines学习笔记(四)"></a><font color="#0077bb">Text Retrieval and Search Engines学习笔记(四)</font></h1><p>这篇文章是接着上一篇<a href="https://www.fengqinglei.top/2019/10/17/text-retrieval-and-search-engines-3/">Text Retrieval and Search Engines学习笔记(三)</a> ，这一篇我们介如何绍下实现<strong>Vector Space Model</strong>所需要的一些步骤和流程。</p>
+<h2 id="System-Implementation"><a href="#System-Implementation" class="headerlink" title="System Implementation"></a><font color="#0077bb">System Implementation</font></h2><p>前面我们介绍了<strong>Vector Space Model</strong>的一种实现-&gt; <strong>BM25</strong>,虽然我们从数学上已经定义好了rank的函数，但是我们还得想办法进行高效的计算rank函数，因为有的时候我们会在我们的搜索引擎中存放千万甚至几十亿的数据,为了让用户在几百毫秒的时间内完成一次检索，我们必须非常高效的计算rank函数。<br><a id="more"></a></p>
+<h3 id="一个典型的信息检索系统的架构"><a href="#一个典型的信息检索系统的架构" class="headerlink" title="一个典型的信息检索系统的架构"></a><font color="#0077bb">一个典型的信息检索系统的架构</font></h3><p><a href="https://imgchr.com/i/KgB2z6" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/10/28/KgB2z6.md.png" alt="KgB2z6.md.png"></a><br>当然刚开始的信息检索系统并不是这个样子，很久以前，信息检索系统并没有这么复杂，因为网上的数据还没有今天这么庞大，在那个软盘只有几十kb的年代，所谓的搜索引擎真的就是使用用户的关键字一篇一篇的找，可以是正则表达式也可以是普通的字符串查找，但是随着网页上的数据越来越多，这种一篇一篇查找的方式已经不能满足用户对检索的实时响应性，所以google的创始人搞出了<strong>Invert Index</strong>,为啥叫<strong>Invert Index</strong>,因为以前是以文档为主键，遍历文档进行关键字查找，而<strong>Invert Index</strong>是以关键词为主键，通过关键词找到对应的文档，其实这也是正常的用户场景，我们在google检索的时候，大部分情况下输入都是很短的。既然是对关键词，所以才会有<strong>Tokenization</strong>的概念.</p>
+<h4 id="分词"><a href="#分词" class="headerlink" title="分词"></a><font color="#0077bb">分词</font></h4><ul>
+<li>同义词处理，相同意思的词应该映射到同一个词上</li>
+<li>词干提取(stemming)和词形还原(lemmatization) </li>
+<li>关键字提取，英文可能比较简单，直接按照空格切分就行了，但是类似于中午我们需要对关键词进行一次切分</li>
+<li>…</li>
 </ul>
-</blockquote>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>获取信息的方式</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Querying(查询)</td>
-<td>这个是最常见的模式，比如大家到百度或者google上使用关键词查询</td>
-</tr>
-<tr>
-<td>Browsing(浏览)</td>
-<td>这个也是比较常见的，基本上当你不知道买啥的时候去淘宝上瞎逛就是浏览模式</td>
-</tr>
-</tbody>
-</table>
-</div>
-<blockquote>
-<ul>
-<li>push(推送)<br>这种模式下，系统占有主动权，系统可以通过对用户profile或者用户的行为产生一定的“理解”，将用户可能想要的信息推送给用户（类似电商更具购买记录推送类似商品，或者类似用户推荐商品）</li>
+<h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a><font color="#0077bb">索引</font></h4><ul>
+<li>索引就是将原始的文档转换成可以支持快速检索的数据结构，说白了就是预计算</li>
+<li>倒排索引就是为了支持计算算法所设计的一种索引方式</li>
+<li>。。。</li>
 </ul>
-</blockquote>
-<h2 id="Text-Retrieval-Problem"><a href="#Text-Retrieval-Problem" class="headerlink" title="Text Retrieval Problem"></a><font color="#0077bb">Text Retrieval Problem</font></h2><blockquote>
-<ul>
-<li>Text Retrieval 是什么<br>文本检索应该可以说是<strong>Information Retrieval</strong>的一种特殊情况把，说白就是收集现有的文本信息存储到搜索引擎中，根据用户给定的检索语句，搜索引擎返回<strong>相关</strong>的文档给用户。</li>
-<li>Text Retrieval(TR)和数据库检索的有什么区别</li>
-</ul>
-</blockquote>
+<h4 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a><font color="#0077bb">倒排索引</font></h4><p>下面我们重点介绍下倒排索引，倒排索引是一种数据结构，通过这种数据结构我们可以快速进行排序算法的计算,下面是倒排索引的一个例子:<br><a href="https://imgchr.com/i/KgRQsI" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/10/28/KgRQsI.md.png" alt="KgRQsI.md.png"></a><br>这里我们可以通过这个例子清楚的理解<strong>正排索引</strong>和<strong>倒排索引</strong>的区别</p>
 <div class="table-container">
 <table>
 <thead>
 <tr>
 <th>-/-</th>
-<th>文本检索</th>
-<th>数据库检索</th>
+<th>倒排索引</th>
+<th>正排索引 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>信息结构</td>
-<td>非结构化，自由结构的文本</td>
-<td>结构化数据</td>
+<td>特点</td>
+<td>记录某个关键字在哪些文档中出现和出现的次数</td>
+<td>记录某个文档中出现哪些关键词</td>
 </tr>
 <tr>
-<td>检索方式</td>
-<td>有歧义的，非完整的</td>
-<td>完整的，带有语义定义的</td>
-</tr>
-<tr>
-<td>返回方式</td>
-<td>有相关性的文档</td>
-<td>完全匹配到的结果</td>
+<td>使用方式</td>
+<td>构建一次，多次使用</td>
+<td>不需要构建，每次scan 就行了 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>TR(Text Retrieval) 是经验性的问题，我们很难在数学上证明一个方法比另外一个方法好，并且必须依赖经验性的评估。</p>
-<blockquote>
+<p>并且倒排索引在搜索引擎中常见的term检索，bool检索的效率都远远高于正排索引，这是因为倒排索引采用了预计算的方式，对每个关键词出现的文档编号都做了记录，用的时候取出来就行了，即使对于稍微复杂的bool检索，也只需要对文档集合做对应的交、并、补等集合操作即可。那么倒排索引中到底有哪一些数据结构来保证我们能够快速获得计算rank函数的参数呢？</p>
 <ul>
-<li>Text Retrieval 的定义<br>虽然我们没法使用数学公式给出100%的定义，但是我们依然可以在某种成都上给Text Retrieval下定义。</li>
+<li>字典:正常来说字典的大小不会特别大，虽然中国汉字有非常多，常用的也就3500个，也就是说字典的大小由于人类使用自然语言的方式会是一可控的大小<ul>
+<li>我们需要对字典进行随机读取</li>
+<li>一般来说为了高效率，字典我们都选择放在内存中</li>
+<li>可以使用hash表 ，B-树,前缀树等方式实现</li>
 </ul>
-</blockquote>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>术语</th>
-<th>定义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Vocabulary(词汇):</td>
-<td>V={W<sub>1</sub>,W<sub>2</sub>,W<sub>3</sub>,W<sub>4</sub>….W<sub>N</sub>}, 这里W<sub>i</sub> 表示某个词</td>
-</tr>
-<tr>
-<td>Query(查询条件):</td>
-<td>q=q<sub>1</sub>,…,q<sub>m</sub>, q<sub>i</sub> $\in$ V</td>
-</tr>
-<tr>
-<td>Document(文档):</td>
-<td>d<sub>i</sub>=d<sub>i1</sub>,…,d<sub>ij</sub>, d<sub>ij</sub> $\in$ V</td>
-</tr>
-<tr>
-<td>Collection(集合):</td>
-<td>C={d<sub>i</sub>,…, d<sub>M</sub>}，所有的文档组成了一个集合</td>
-</tr>
-<tr>
-<td>Set of relevant documents(相关文档):</td>
-<td>R(q) $\subseteq$ C，相关文档是所有的文档的一个子集</td>
-</tr>
-<tr>
-<td>Task(任务):</td>
-<td>计算文档相关度R<sup>,</sup>(q),这里的R<sup>,</sup>(q)其实是R(q)的一个近似表示，前面说了我们没法给出100%的数学定义，但是我们可以给出一个近似的定义(可以度量并且有效的定义))</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="如何计算R-q"><a href="#如何计算R-q" class="headerlink" title="如何计算R,(q)"></a><font color="#0077bb">如何计算R<sup>,</sup>(q)</font></h2><p>由于Text Retrieval的目标是找到相关的文档，那么如何定义相关，我们则需要通过完成R<sup>,</sup>(q)的计算，这里给出两种可行的方法.(方法有很多，不仅仅局限于这两种))</p>
-<blockquote>
+</li>
+<li>Postings(倒排表): 一般来说这个很大，因为文章的关键词数量比较多，由于有位置信息，所以即使相同的关键词由于出现的位置不一样，在存储上这些空间是没法像字典一样节约下来的。<ul>
+<li>期望是通过顺序读写（太大了不能放到内存中）</li>
+<li>可以放在磁盘上</li>
+<li>一般会包含文档编号，词频，词的位置等信息</li>
+<li>由于会很大所以需要进行数据的压缩<br>那么到底倒排索引是怎么生成的呢?</li>
+</ul>
+</li>
+</ul>
+<h4 id="如何生成倒排索引"><a href="#如何生成倒排索引" class="headerlink" title="如何生成倒排索引"></a><font color="#0077bb">如何生成倒排索引</font></h4><ul>
+<li>第一步: 针对每个文档生成三元组 (termID,docID,freq)</li>
+<li>第二步: 按照termID 对三元组进行排序 </li>
+<li>第三步: 根据termID 进行docID,freq 合并</li>
+<li>第四步: 输出倒排文件<br>如下图所示:<br><a href="https://imgchr.com/i/Kj18MQ" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/11/03/Kj18MQ.md.png" alt="Kj18MQ.md.png"></a><br>实际上生成倒排文件并不是那么困难，最难的是如何使用有限的内存生成倒排文件，因为往往我们真实场景中文档可能很多很大，就算是TB内存级别的机器可能也无法在内存中一次性生成倒排文件，但是我们可以生成很多倒排文件，然后对这些文件在内存中合并(因为文件的内容都是排好顺序的，所以我们不必将倒排文件全部读入到内存中进行合并))，这也是lucene生成索引的步骤，在lucene中可以生成很多很多的段(segment), lucene在后台使用单独的线程对这些段进行合并来避免段太多导致的查询性能低下的问题。</li>
+</ul>
+<h4 id="索引压缩"><a href="#索引压缩" class="headerlink" title="索引压缩"></a><font color="#0077bb">索引压缩</font></h4><p>为了节约硬件成本,我们需要对索引进行压缩，这里举个例子来说明为什么我们需要对索引进行压缩，假设我们有1亿条文档需要进行压缩，这里文档编号我们使用int类型存储(占用4个字节),那么为了存储这一亿个文档编号我们需要100000000<em>4/1024/1024=381.4MB的内存，但是如果我对这1亿个文档编号使用bitset来存储的话大约需要100000000</em>4/32/1024/1024=11.9MB就够了，可以对文档编号压缩可以大大降低存储所消耗的资源。这里我们介绍几种常见的整型压缩算法。</p>
 <ul>
-<li>策略(一)：文档选择方式<br>R<sup>,</sup>(q)={d$\in$C|f(d,q)=1},这里的f(d,q)$\in${0,1}是我们定义的一个方法，这个方法取值要么为0要么为1 （二元分类器），说白了就是要么相关(1),要不不相关(0)</li>
-<li>策略(二)：文档排序<br>R<sup>,</sup>(q)={d$\in$C|f(d,q)&gt;$\theta$}, 这里的f(d,q)$\in$R是一个度量的方法，这里的$\theta$}是一取决于用户的选择，此时系统只需要决定是否某个文档比另外的文档<strong>更相关</strong>（相对相关度）<br>当然通过这两种方式计算R<sup>,</sup>(q)都是有效的，但是那种方法更加切合实际？我们可以通过以下几个点进行分析。<br><img src="https://s2.ax1x.com/2019/10/08/ufarWQ.png" alt="Document_selection_vs_ranking.png"></li>
-<li>二元分类其很有可能不太准确，因为很难区分一个文档到底是相关还是不想关，可能我们设定的条件会约束太强，也有可能约束太弱，那么或多或少的导致会将相关的文档会遗漏或者不相关的文档会被返回给最终用户。</li>
-<li>即使我们在分类的时候将所有的结果都正确的放置在正确的分类上，但是实际上所有的文档的相关性不是都是一样的，不同的文档的相关程度是不尽相同的。所以我们需要设置一定的优先级。</li>
-<li>综上两个观点，我们认为ranking是一个更好的解决方案。<h2 id="ranking方式的理论论证"><a href="#ranking方式的理论论证" class="headerlink" title="ranking方式的理论论证"></a><font color="#0077bb">ranking方式的理论论证</font></h2><a href="https://www.emerald.com/insight/content/doi/10.1108/eb026647/full/html" target="_blank" rel="noopener">The probability ranking principle in IR</a> 原文是:<br>Returning a ranked list of documents in descending order of probability that a document is relevant to the query is the optimal strategy under the following two assumptions:<br>– The utility of a document (to a user) is <strong>independent</strong> of the utility of any other document<br>– A user would browse the results <strong>sequentially</strong><br>简单来说就是:文本检索引擎按照文档和query相关的概率降序排列是一个最优策略，当然这个最有策略基于以下两个前提</li>
-<li>某一个文档的作用和其他文档的作用是互不相关的</li>
-<li>用户会按照结果的顺序来浏览结果<br>但是实际上这两个假设并不是100%都是成立的，两个文档可能是相似的，所以肯定不是100%完全独立的，而且用户可能会跳着看一些结果，但是，即使这些假设都不是100%成立的，按照文档和query相关的概率对结果进行排序在大部分的场景下仍然是一种合理的做法。</li>
+<li>biset: bitset可以简单的理解为使用<strong>位信息</strong>来存储integer，例如正常情况下一个整型就占用了4个字节(32位),如果我们只是为了表示一个整型的集合(不管顺序),那么其实我们可以使用位信息来存储，每个位表示一个数，32位表示0～31这32个数字。同理表示0～63需要2个整型(整型数组)就行了</li>
+<li>差值压缩: 想象下我们需要存储每个term的位置信息(起始和结束的位置)，那么当文档很长的时候表示位置的数字可能比较大，例如这篇文档有1万个字符，那么位置信息就可能是9000,但是因为位置信息都是连续的，所以前后位置信息的差值会很小，以中文为例子，前一个汉字和后一个汉字的差距永远都是1(即使文档的长度很长很长)，存储9000至少需要10个bit,但是存储1只需要1个bit就行了，当文档很长而且文档非常多的时候这样的压缩算法将会节约大量的存储空间。</li>
 </ul>
-</blockquote>
-<p>至此，我们可以得出-&gt; 对文档进行排序相比对文档进行二元分类似乎是一种更加有效的解决文本检索问题的方法，前面我们也提到过，解决文档和query相关的关键在于如何计算R<sup>,</sup>(q),其实就是如何定义一个有效的f(q,d)方法。这个我会在后面的章节继续探讨。</p>
+<h4 id="倒排索引如何加速打分公式"><a href="#倒排索引如何加速打分公式" class="headerlink" title="倒排索引如何加速打分公式"></a><font color="#0077bb">倒排索引如何加速打分公式</font></h4><p>我们在之前的文章中描述过BM25的打分公式:<br>f(q,d) = $\sum_{w \in q \cap d}$ [C(w,q) $\frac{(k+1)C(w,d)}{C(w,d)+k(1-b+b \frac {d}{avdl})}$log$\frac{M+1}{df(w)}$)]</p>
+<ul>
+<li>C(w,d) 表示w在文档d中出现的次数，从上面的倒排索引生成的过程中，我们知道词频信息已经在生成索引的时候被我们写入到倒排表中</li>
+<li>avdl 平均文档长度，我们在生成倒排表的时候会遍历所有的文档，我们可以存储每个文档的长度，在进行打分的时候通过每个文档的长度计算出平均文档长度</li>
+<li>df(w) 文档频率,表示有多少文档出现w，虽然我们但在生成倒排表的时候没有直接将这个数字写入到倒排文件中，但是我们记录了每个w出现的文档编号，统计文档编号的个数，我们可以直接得到df(w)<br>到这里也就说: 基本上BM25打分公式中用于计算最终文档的分数的算子，我们基本上已经在倒排索引中进行的直接或者间接的存储，那么当我们查询的结果有几十万或者几百万的文档时，我们依然可以在几百或者几十毫秒对命中到的文档进行排序输出。</li>
+</ul>
 
       
     </div>
@@ -564,7 +499,11 @@
           
             <a href="/tags/Search-Engine/" rel="tag"># Search Engine</a>
           
-            <a href="/tags/Probabilistic-Model/" rel="tag"># Probabilistic Model</a>
+            <a href="/tags/Invert-Index/" rel="tag"># Invert Index</a>
+          
+            <a href="/tags/Compression/" rel="tag"># Compression</a>
+          
+            <a href="/tags/postings-list/" rel="tag"># postings list</a>
           
         </div>
       
@@ -577,8 +516,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/03/solr-source-code-deploy/" rel="next" title="玩转Solr源码之(三)Solr源码Deploy">
-                <i class="fa fa-chevron-left"></i> 玩转Solr源码之(三)Solr源码Deploy
+              <a href="/2019/10/27/elasticsearch-docker-install/" rel="next" title="Elasticsearch docker volume permission issue">
+                <i class="fa fa-chevron-left"></i> Elasticsearch docker volume permission issue
               </a>
             
           </div>
@@ -586,10 +525,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/09/text-retrieval-and-search-engines-2/" rel="prev" title="Text Retrieval and Search Engines 2">
-                Text Retrieval and Search Engines 2 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -740,7 +675,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Text-Retrieval-and-Search-Engines学习笔记-一"><span class="nav-number">1.</span> <span class="nav-text">Text Retrieval and Search Engines学习笔记(一)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#课程大纲"><span class="nav-number">1.1.</span> <span class="nav-text">课程大纲</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Natural-Language-Content-Analysis"><span class="nav-number">1.2.</span> <span class="nav-text">Natural Language Content Analysis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Text-Access"><span class="nav-number">1.3.</span> <span class="nav-text">Text Access</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Text-Retrieval-Problem"><span class="nav-number">1.4.</span> <span class="nav-text">Text Retrieval Problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何计算R-q"><span class="nav-number">1.5.</span> <span class="nav-text">如何计算R,(q)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ranking方式的理论论证"><span class="nav-number">1.6.</span> <span class="nav-text">ranking方式的理论论证</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Text-Retrieval-and-Search-Engines学习笔记-四"><span class="nav-number">1.</span> <span class="nav-text">Text Retrieval and Search Engines学习笔记(四)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#System-Implementation"><span class="nav-number">1.1.</span> <span class="nav-text">System Implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一个典型的信息检索系统的架构"><span class="nav-number">1.1.1.</span> <span class="nav-text">一个典型的信息检索系统的架构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分词"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">分词</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#倒排索引"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">倒排索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何生成倒排索引"><span class="nav-number">1.1.1.4.</span> <span class="nav-text">如何生成倒排索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引压缩"><span class="nav-number">1.1.1.5.</span> <span class="nav-text">索引压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#倒排索引如何加速打分公式"><span class="nav-number">1.1.1.6.</span> <span class="nav-text">倒排索引如何加速打分公式</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
