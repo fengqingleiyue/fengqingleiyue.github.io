@@ -79,7 +79,7 @@
 
 
 
-  <meta name="keywords" content="Solr,Debug,源码,调试,">
+  <meta name="keywords" content="Solr,Phrase Query,bug,">
 
 
 
@@ -92,18 +92,22 @@
 
 
 
-<meta name="description" content="玩转Solr源码之—Solr源码Debug这篇文章是玩转Solr源码系列的第二篇，紧接着上一篇的源码导入，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看源码导入的部分。 定位源码入口Solr 的源码入口为org.apache.solr.client.solrj.StartSolrJetty,主方法也比较简短,">
-<meta name="keywords" content="Solr,Debug,源码,调试">
+<meta name="description" content="Solr Bug 小记做为Apache的顶级开源项目之一,一般来说大家遇到Solr中的源码bug的概率还是非常底的，但是笔者还真就遇到了一个,突然感觉幸福来的太突然了。(因为笔者并不是这个bug的第一发现这和解决者，所以这里笔者更多的是记录这个bug的发现和解决方式) [这里的Solr版本是7.7.2] Bug复现这个bug复现的条件有三个:">
+<meta name="keywords" content="Solr,Phrase Query,bug">
 <meta property="og:type" content="article">
-<meta property="og:title" content="玩转Solr源码之(二)Solr源码Debug">
-<meta property="og:url" content="https://www.fengqinglei.top/2019/10/01/solr-source-code-debug/index.html">
+<meta property="og:title" content="Solr bug 小记">
+<meta property="og:url" content="https://www.fengqinglei.top/2019/12/23/solr-phrase-query-bug/index.html">
 <meta property="og:site_name" content="态度决定高度,细节决定成败">
-<meta property="og:description" content="玩转Solr源码之—Solr源码Debug这篇文章是玩转Solr源码系列的第二篇，紧接着上一篇的源码导入，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看源码导入的部分。 定位源码入口Solr 的源码入口为org.apache.solr.client.solrj.StartSolrJetty,主方法也比较简短,">
+<meta property="og:description" content="Solr Bug 小记做为Apache的顶级开源项目之一,一般来说大家遇到Solr中的源码bug的概率还是非常底的，但是笔者还真就遇到了一个,突然感觉幸福来的太突然了。(因为笔者并不是这个bug的第一发现这和解决者，所以这里笔者更多的是记录这个bug的发现和解决方式) [这里的Solr版本是7.7.2] Bug复现这个bug复现的条件有三个:">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-03T02:33:08.974Z">
+<meta property="og:image" content="https://s2.ax1x.com/2019/12/25/lkEPJJ.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/12/26/lkZaxs.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/12/26/lkeMYF.md.png">
+<meta property="og:updated_time" content="2019-12-26T13:25:44.792Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="玩转Solr源码之(二)Solr源码Debug">
-<meta name="twitter:description" content="玩转Solr源码之—Solr源码Debug这篇文章是玩转Solr源码系列的第二篇，紧接着上一篇的源码导入，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看源码导入的部分。 定位源码入口Solr 的源码入口为org.apache.solr.client.solrj.StartSolrJetty,主方法也比较简短,">
+<meta name="twitter:title" content="Solr bug 小记">
+<meta name="twitter:description" content="Solr Bug 小记做为Apache的顶级开源项目之一,一般来说大家遇到Solr中的源码bug的概率还是非常底的，但是笔者还真就遇到了一个,突然感觉幸福来的太突然了。(因为笔者并不是这个bug的第一发现这和解决者，所以这里笔者更多的是记录这个bug的发现和解决方式) [这里的Solr版本是7.7.2] Bug复现这个bug复现的条件有三个:">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/12/25/lkEPJJ.md.png">
 
 
 
@@ -133,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="https://www.fengqinglei.top/2019/10/01/solr-source-code-debug/">
+  <link rel="canonical" href="https://www.fengqinglei.top/2019/12/23/solr-phrase-query-bug/">
 
 
 
 
 
-  <title>玩转Solr源码之(二)Solr源码Debug | 态度决定高度,细节决定成败</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>Solr bug 小记 | 态度决定高度,细节决定成败</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -286,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.fengqinglei.top/2019/10/01/solr-source-code-debug/">
+    <link itemprop="mainEntityOfPage" href="https://www.fengqinglei.top/2019/12/23/solr-phrase-query-bug/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="FQL">
@@ -303,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">玩转Solr源码之(二)Solr源码Debug</h1>
+          <h1 class="post-title" itemprop="name headline">Solr bug 小记</h1>
         
 
         <div class="post-meta">
@@ -315,8 +319,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T22:19:40+08:00">
-                2019-10-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-23T23:44:37+08:00">
+                2019-12-23
               </time>
             
 
@@ -334,8 +338,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/10/01/solr-source-code-debug/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/10/01/solr-source-code-debug/" itemprop="commentCount"></span>
+                <a href="/2019/12/23/solr-phrase-query-bug/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/23/solr-phrase-query-bug/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -362,7 +366,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  742 字
+                  1.1k 字
                 </span>
               
 
@@ -378,7 +382,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3 分钟
+                  4 分钟
                 </span>
               
             </div>
@@ -399,21 +403,32 @@
       
 
       
-        <h1 id="玩转Solr源码之—Solr源码Debug"><a href="#玩转Solr源码之—Solr源码Debug" class="headerlink" title="玩转Solr源码之—Solr源码Debug"></a><font color="#0077bb">玩转Solr源码之—Solr源码Debug</font></h1><p>这篇文章是<strong>玩转Solr源码</strong>系列的第二篇，紧接着上一篇的<a href="https://www.fengqinglei.top/2019/10/01/solr-source-code-import/">源码导入</a>，如果你还对如何将Solr源码导入到IDE还不了解的话，建议先看<strong>源码导入</strong>的部分。</p>
-<h2 id="定位源码入口"><a href="#定位源码入口" class="headerlink" title="定位源码入口"></a><font color="#2C3E50">定位源码入口</font></h2><p>Solr 的源码入口为<strong>org.apache.solr.client.solrj.StartSolrJetty</strong>,主方法也比较简短,<br><a id="more"></a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String[] args )</span> </span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="comment">//System.setProperty("solr.solr.home", "../../../example/solr");</span></span><br><span class="line"></span><br><span class="line">    Server server = <span class="keyword">new</span> Server();</span><br><span class="line">    ServerConnector connector = <span class="keyword">new</span> ServerConnector(server, <span class="keyword">new</span> HttpConnectionFactory());</span><br><span class="line">    <span class="comment">// Set some timeout options to make debugging easier.</span></span><br><span class="line">    connector.setIdleTimeout(<span class="number">1000</span> * <span class="number">60</span> * <span class="number">60</span>);</span><br><span class="line">    connector.setSoLingerTime(-<span class="number">1</span>);</span><br><span class="line">    connector.setPort(<span class="number">8983</span>);</span><br><span class="line">    server.setConnectors(<span class="keyword">new</span> Connector[] &#123; connector &#125;);</span><br><span class="line">    </span><br><span class="line">    WebAppContext bb = <span class="keyword">new</span> WebAppContext();</span><br><span class="line">    bb.setServer(server);</span><br><span class="line">    bb.setContextPath(<span class="string">"/solr"</span>);</span><br><span class="line">    bb.setWar(<span class="string">"webapp/web"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//    // START JMX SERVER</span></span><br><span class="line"><span class="comment">//    if( true ) &#123;</span></span><br><span class="line"><span class="comment">//      MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();</span></span><br><span class="line"><span class="comment">//      MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);</span></span><br><span class="line"><span class="comment">//      server.getContainer().addEventListener(mBeanContainer);</span></span><br><span class="line"><span class="comment">//      mBeanContainer.start();</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line">    </span><br><span class="line">    server.setHandler(bb);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      System.out.println(<span class="string">"&gt;&gt;&gt; STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP"</span>);</span><br><span class="line">      server.start();</span><br><span class="line">      <span class="keyword">while</span> (System.in.available() == <span class="number">0</span>) &#123;</span><br><span class="line">        Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      server.stop();</span><br><span class="line">      server.join();</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">      System.exit(<span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="配置Solr-Home"><a href="#配置Solr-Home" class="headerlink" title="配置Solr Home"></a><font color="#2C3E50">配置Solr Home</font></h2><p>为了能够进行源码的bug，我们需要配置好solr_home,这里我们可以直接使用官方的Solr发行包中的example来做演示（真实的开发中，一般会有自己定义好的solr_home），直接下载solr的发行包(这里以solr-7.7.2为例子)<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Documents</span><br><span class="line">curl <span class="string">"http://mirrors.tuna.tsinghua.edu.cn/apache/lucene/solr/7.7.2/solr-7.7.2.tgz"</span> -o solr-7.7.2.tgz &amp;&amp; tar -xvf solr-7.7.2.tgz</span><br><span class="line">mkdir solr_home &amp;&amp; <span class="built_in">cd</span> solr_home</span><br><span class="line">cp ~/Documents/solr-7.7.2/server/solr/solr.xml ./</span><br><span class="line">cp -r ~/Documents/solr-7.7.2/server/solr/configsets/sample_techproducts_configs ./</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"collection=TEST"</span> &gt; sample_techproducts_configs/core.properties</span><br></pre></td></tr></table></figure></p>
-<p>这里简单解释下最后一个命令(echo “collection=TEST …”)的含义,Solr中有collection和core的概念。</p>
-<blockquote>
+        <h1 id="Solr-Bug-小记"><a href="#Solr-Bug-小记" class="headerlink" title="Solr Bug 小记"></a><font color="#0077bb">Solr Bug 小记</font></h1><p>做为Apache的顶级开源项目之一,一般来说大家遇到Solr中的源码bug的概率还是非常底的，但是笔者还真就遇到了一个,突然感觉幸福来的太突然了。(因为笔者并不是这个bug的第一发现这和解决者，所以这里笔者更多的是记录这个bug的发现和解决方式) [这里的Solr版本是7.7.2]</p>
+<h2 id="Bug复现"><a href="#Bug复现" class="headerlink" title="Bug复现"></a><font color="#2C3E50">Bug复现</font></h2><p>这个bug复现的条件有三个:<br><a id="more"></a></p>
 <ul>
-<li>Collection<br>Solr中的collection由一个或者多个core组成，一个collection对应一份独立的config，在单节点的模式下，core和collection是等价的,在集群模式下，一个collection会有多个分片(shard)组成，每个分片又可以又多个副本(replica),每个shard对应一个core</li>
-<li>core<br>Solr中的core是一个包含index和config的运行实例<h2 id="配置StartSolrJetty"><a href="#配置StartSolrJetty" class="headerlink" title="配置StartSolrJetty"></a><font color="#2C3E50">配置StartSolrJetty</font></h2>solr中的solr_home 可以通过通过环境变量进行设置，直接上代码<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setProperty(<span class="string">"solr.solr.home"</span>, <span class="string">"/home/fql/Documents/solr_home"</span>);</span><br></pre></td></tr></table></figure>
+<li><p>使用Solr的edismax Query Parser</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">requestHandler</span> <span class="attr">name</span>=<span class="string">"/select"</span> <span class="attr">class</span>=<span class="string">"solr.SearchHandler"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">lst</span> <span class="attr">name</span>=<span class="string">"defaults"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">str</span> <span class="attr">name</span>=<span class="string">"echoParams"</span>&gt;</span>explicit<span class="tag">&lt;/<span class="name">str</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">str</span> <span class="attr">name</span>=<span class="string">"defType"</span>&gt;</span>edismax<span class="tag">&lt;/<span class="name">str</span>&gt;</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>edismax的lowercaseOperators参数设置成true</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bool</span> <span class="attr">name</span>=<span class="string">"lowercaseOperators"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">bool</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Phrase Query的多了对括号</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">id:(<span class="string">"car and bus"</span>)</span><br><span class="line"><span class="comment">//这里的id字段是我们随意设置的某个字段，字段的定义如下</span></span><br><span class="line"><span class="comment">//&lt;field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-</blockquote>
-<p>还有一个地方需要改动，否则程序无法正常启动，直接上代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bb.setWar(<span class="string">"webapp/web"</span>); ==&gt; bb.setWar(<span class="string">"solr/webapp/web"</span>);</span><br></pre></td></tr></table></figure></p>
-<p>设置完毕之后就可以启动<strong>StartSolrJetty</strong>后直接在浏览器中输入<a href="http://127.0.0.1:8983/solr就可以开始畅游solr的源码啦.![本地访问](https://s2.ax1x.com/2019/10/02/udq8Tx.png" target="_blank" rel="noopener">http://127.0.0.1:8983/solr就可以开始畅游solr的源码啦.![本地访问](https://s2.ax1x.com/2019/10/02/udq8Tx.png</a>)</p>
-<h3 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a><font color="#2C3E50">小技巧</font></h3><p>StartSolrJetty默认的配置是没有太多的日志输出的，但是既然我们都已经开始debug solr的源代码了，还是输出更多的日志帮助我们更好的分析源码吧，同样，开启debug日志的代码也比较简单<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setProperty(<span class="string">"log4j2.debug"</span>,<span class="string">"true"</span>);</span><br></pre></td></tr></table></figure></p>
-<p>这样我们就剋有看到所有的日志啦。下一篇我们将要介绍如果将修改过的solr源码部署到公司或者个人的nexus仓库,也是本系列的最后一篇。</p>
+<p>(完整的SearchHandler的定义如下)<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">requestHandler</span> <span class="attr">name</span>=<span class="string">"/select"</span> <span class="attr">class</span>=<span class="string">"solr.SearchHandler"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">lst</span> <span class="attr">name</span>=<span class="string">"defaults"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">str</span> <span class="attr">name</span>=<span class="string">"echoParams"</span>&gt;</span>explicit<span class="tag">&lt;/<span class="name">str</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">str</span> <span class="attr">name</span>=<span class="string">"defType"</span>&gt;</span>edismax<span class="tag">&lt;/<span class="name">str</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">bool</span> <span class="attr">name</span>=<span class="string">"lowercaseOperators"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">bool</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">int</span> <span class="attr">name</span>=<span class="string">"rows"</span>&gt;</span>10<span class="tag">&lt;/<span class="name">int</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">bool</span> <span class="attr">name</span>=<span class="string">"preferLocalShards"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">bool</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">lst</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">requestHandler</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Bug的点为: id:(“car and bus”)<strong>中的and会因为edismax的解析会变成大写的AND</strong>,但是如果去掉括号[id:”car and bus”],那么解析的结果就是正常的。具体的可以参考下图:<br><img src="https://s2.ax1x.com/2019/12/25/lkEPJJ.md.png" alt="lkEPJJ.md.png"></p>
+<h2 id="为啥括号惹了祸"><a href="#为啥括号惹了祸" class="headerlink" title="为啥括号惹了祸"></a><font color="#2C3E50">为啥括号惹了祸</font></h2><p>如果引号的两侧没有括号，那么这个query的解析就是正常的，这个还是好理解的，如果加上了引号，在Lucene中我们称这种query为Phrase Query(短语查询)，而针对Phrase Query如果字段类型是string类型的话，Solr是不会处理phrase的任何内容,但是如果加上括号为啥即使字段类型为string类型，我们输入的小写的and会变成大写的AND呢？我们来看下<strong>org.apache.solr.search.ExtendedDismaxQParser.splitIntoClauses#686</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ch = s.charAt(pos);</span><br><span class="line"><span class="keyword">if</span> (!ignoreQuote &amp;&amp; ch==<span class="string">'"'</span>) &#123;</span><br><span class="line">    clause.isPhrase = <span class="keyword">true</span>;</span><br><span class="line">    inString = <span class="string">'"'</span>; <span class="comment">// 如果冒号(:)后面的第一个字符是引号(")，那么这个clause会被标记成phrase，但是如果我们加上了括号，那么冒号(:)后面的第一个字符就是左括号了，那么这个phrase标记就不会被打上</span></span><br><span class="line">    pos++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也就是说因为我们加上了括号使得原来的代码对Phrase query的处理失效了。这样会导致query，id:(“car and bus”)会被拆成3个clause:</p>
+<ul>
+<li>clause 1 : id:(“car</li>
+<li>clause 2 : and</li>
+<li>clause 3 : bus”)<br>关注到源码中splitIntoClauses方法的下一个方法<strong>org.apache.solr.search.ExtendedDismaxQParser.rebuildUserQuery#414</strong>中<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">if</span> (lowercaseOperators &amp;&amp; i&gt;<span class="number">0</span> &amp;&amp; i+<span class="number">1</span>&lt;clauses.size()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">"AND"</span>.equalsIgnoreCase(s)) &#123;</span><br><span class="line">        s=<span class="string">"AND"</span>;<span class="comment">// 就是这里将小写的and专成了大写的AND</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"OR"</span>.equalsIgnoreCase(s)) &#123;</span><br><span class="line">        s=<span class="string">"OR"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>好吧，确实是一个括号导致的这个bug的出现。笔者遇到这个bug也是因为部分数据中出现了小写的and，然后因为使用了edismax和lowercaseOperators=true才被客户发现了。(对的，这个bug是我们的客户发现的:p )</p>
+<h2 id="如何修正Bug"><a href="#如何修正Bug" class="headerlink" title="如何修正Bug"></a><font color="#2C3E50">如何修正Bug</font></h2><p>既然我们已经知道了为什么会产生，那么修正应该是显而易见的事情吧？有人看到这里可能会说不就是多了对括号嘛:我在代码里面多加上一个判断就好了，确实，这可以解决我们现在的特殊case，但是你怎么知道引号两侧只有一对括号，可能会有2对[id:((“car and bus”))],可能有n对，貌似这样代码不好写啊！！！这里我们不卖关子，直接给出最终答案:<strong>org.apache.solr.search.ExtendedDismaxQParser#715</strong>:<br><img src="https://s2.ax1x.com/2019/12/26/lkZaxs.png" alt="lkZaxs.md.png">,为了方便大家Ctrl+c,Ctrl+v，这里也给出代码部:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(!ignoreQuote &amp;&amp; ch==<span class="string">'"'</span>) &#123;</span><br><span class="line">    clause.isPhrase = <span class="keyword">true</span>;</span><br><span class="line">    inString = <span class="string">'"'</span>;</span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">&#125;</span><br><span class="line">`</span><br></pre></td></tr></table></figure></p>
+<p>看起来非常简单，只有4行，其实就是把我们上面的想法嵌入到已有的流程中，当你仔细阅读源码的时候你会发现org.apache.solr.search.ExtendedDismaxQParser的693到715，实际上在处理冒号(:)之后的内容，而我们要加上的就是如果冒号后面(非第一个)的字符也是引号的情况下，<strong>继续保证原有的phrase不会因为括号的出现而被拆成好几份</strong>。修改源码之后重新使用测试query你会发现问题解决了，如下图:<br><img src="https://s2.ax1x.com/2019/12/26/lkeMYF.md.png" alt="lkeMYF.md.png"></p>
 
       
     </div>
@@ -433,11 +448,9 @@
           
             <a href="/tags/Solr/" rel="tag"># Solr</a>
           
-            <a href="/tags/Debug/" rel="tag"># Debug</a>
+            <a href="/tags/Phrase-Query/" rel="tag"># Phrase Query</a>
           
-            <a href="/tags/源码/" rel="tag"># 源码</a>
-          
-            <a href="/tags/调试/" rel="tag"># 调试</a>
+            <a href="/tags/bug/" rel="tag"># bug</a>
           
         </div>
       
@@ -450,8 +463,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/01/solr-source-code-import/" rel="next" title="玩转Solr源码之(一)Solr源码导入IDE">
-                <i class="fa fa-chevron-left"></i> 玩转Solr源码之(一)Solr源码导入IDE
+              <a href="/2019/12/14/meet-solr-lucene-codec/" rel="next" title="Meet Solr Lucene Codec">
+                <i class="fa fa-chevron-left"></i> Meet Solr Lucene Codec
               </a>
             
           </div>
@@ -459,10 +472,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/03/solr-source-code-deploy/" rel="prev" title="玩转Solr源码之(三)Solr源码Deploy">
-                玩转Solr源码之(三)Solr源码Deploy <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -613,7 +622,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#玩转Solr源码之—Solr源码Debug"><span class="nav-number">1.</span> <span class="nav-text">玩转Solr源码之—Solr源码Debug</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定位源码入口"><span class="nav-number">1.1.</span> <span class="nav-text">定位源码入口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Solr-Home"><span class="nav-number">1.2.</span> <span class="nav-text">配置Solr Home</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置StartSolrJetty"><span class="nav-number">1.3.</span> <span class="nav-text">配置StartSolrJetty</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小技巧"><span class="nav-number">1.3.1.</span> <span class="nav-text">小技巧</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr-Bug-小记"><span class="nav-number">1.</span> <span class="nav-text">Solr Bug 小记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bug复现"><span class="nav-number">1.1.</span> <span class="nav-text">Bug复现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为啥括号惹了祸"><span class="nav-number">1.2.</span> <span class="nav-text">为啥括号惹了祸</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何修正Bug"><span class="nav-number">1.3.</span> <span class="nav-text">如何修正Bug</span></a></li></ol></li></ol></div>
             
 
           </div>
