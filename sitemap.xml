@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.fengqinglei.top/2019/10/03/solr-source-code-deploy/</loc>
+    
+    <lastmod>2020-02-19T06:19:46.641Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.fengqinglei.top/2020/02/16/solr-cloud-how-to/</loc>
     
     <lastmod>2020-02-19T03:30:56.197Z</lastmod>
@@ -61,13 +68,6 @@
     <loc>https://www.fengqinglei.top/guestbook/index.html</loc>
     
     <lastmod>2019-10-03T17:17:03.738Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.fengqinglei.top/2019/10/03/solr-source-code-deploy/</loc>
-    
-    <lastmod>2019-10-03T08:30:56.061Z</lastmod>
     
   </url>
   
